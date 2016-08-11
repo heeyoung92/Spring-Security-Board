@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	
+	<select id="selectBoardPaging" parameterType="hashmap" resultType="hashmap">
+	 <![CDATA[
+		SELECT *
+		from (SELECT rownum rnum, pagetable.* , COUNT(*) OVER() AS COUNT
+			FROM (
+  				SELECT LEVEL, IDX, PARENT_IDX,TITLE, HIT_CNT, CREA_DATE, WRITER
+    			FROM TB_BOARD
+    			START WITH 
+  					PARENT_IDX IS NULL
+				CONNECT BY PRIOR  
+					IDX = PARENT_IDX
+				ORDER SIBLINGS BY CREA_DATE DESC
+    		) pagetable
+		)
+		where rnum <= #{END}  AND rnum >= #{START}
+		]]>
+	</select>
+	
+	
+	<select id="selectReplyList" parameterType="hashmap" resultType="hashmap">
+	 <![CDATA[
+		 select *
+			from (SELECT rownum rnum, pagetable.*
+			FROM (
+				SELECT 
+					IDX, PARENT_IDX, INDENT, CONTENTS, CREA_DATE, IP_ADDR, COUNT(*) OVER() AS COUNT
+				FROM 
+					TB_COMMENT
+				WHERE 
+					BOARD_IDX=#{IDX}
+				ORDER BY CREA_DATE DESC
+				)pagetable
+			)
+			where rnum <= 5 AND rnum >= 1
+		]]>
+	</select>
+	
+	<!-- paging  + 대댓글 정렬 -->
+	<select id="selectCommentPaging" parameterType="hashmap" resultType="hashmap">
+	 <![CDATA[
+		SELECT * 
+		from (SELECT rownum rnum, pagetable.*, COUNT(*) OVER() AS COUNT
+			FROM (
+				SELECT 
+					INDENT, CONTENTS, IDX, PARENT_IDX, CREA_DATE, IP_ADDR
+ 			 	FROM 
+ 			 		TB_COMMENT 
+  				START WITH 
+  					PARENT_IDX IS NULL AND BOARD_IDX=#{BOARD_IDX}
+				CONNECT BY PRIOR  
+					IDX = PARENT_IDX
+				ORDER SIBLINGS BY CREA_DATE DESC
+			) pagetable
+		)
+		where rnum <= #{END}  AND rnum >= #{START}
+		]]>
+	</select>
+	
+	
+	
+	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
+ 	   <selectKey keyProperty="IDX" resultType="string" order="BEFORE">
+	        SELECT SEQ_TB_BOARD_IDX.NEXTVAL FROM DUAL
+	    </selectKey>
+    
+	    <![CDATA[
+        INSERT INTO TB_BOARD
+        (
+            IDX,
+            PARENT_IDX,
+            TITLE, 
+            CONTENTS, 
+            HIT_CNT,
+            CREA_DATE, 
+            WRITER,
+            PASSWORD
+        )
+        VALUES
+        (
+           #{IDX},
+           #{PARENT_IDX},
+           #{TITLE}, 
+           #{CONTENTS}, 
+            0,  
+            SYSDATE, 
+            #{ID},
+            #{PWD}
+        )
+    ]]>
+	</insert>
+	
+	<select id="selectBoardDetail" parameterType="hashmap" resultType="hashmap">
+    <![CDATA[
+    	SELECT
+            IDX,
+            TITLE, 
+   		 	CONTENTS,
+            CREA_DATE
+        FROM
+            TB_BOARD
+        WHERE
+            IDX = #{IDX}        
+    ]]>
+	</select>
+	
+	<delete id="deleteBoard" parameterType="hashmap" >
+    <![CDATA[
+    	DELETE
+        FROM
+            TB_BOARD
+        WHERE
+            IDX = #{IDX} OR PARENT_IDX = #{IDX}
+    ]]>
+	</delete>
+	
+	
+	<update id="updateBoard" parameterType="hashmap">	
+	    <![CDATA[
+			UPDATE TB_BOARD 
+        	SET
+            	TITLE=#{TITLE}, CONTENTS=#{CONTENTS}
+        	WHERE
+            	IDX = #{IDX}  
+    	]]>
+	</update>
+		
+	<update id="updateHitCnt" parameterType="hashmap">	
+	    <![CDATA[
+			UPDATE TB_BOARD 
+        	SET
+            	HIT_CNT= HIT_CNT+1
+        	WHERE
+            	IDX = #{IDX}  
+    	]]>
+	</update>
+	
+	<insert id="insertFile" parameterType="hashmap">
+    <![CDATA[
+        INSERT INTO TB_FILE
+        (
+            IDX,
+            BOARD_IDX,
+            FILE_NAME,
+            STORED_FILE_NAME,
+            FILE_SIZE
+        )
+        VALUES
+        (
+            SEQ_TB_FILE_IDX.NEXTVAL,
+            #{BOARD_IDX},
+            #{FILE_NAME},
+            #{STORED_FILE_NAME},
+            #{FILE_SIZE}
+        )
+    ]]>
+</insert>
+
+<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
+    <![CDATA[
+        SELECT
+            IDX,
+            FILE_NAME
+        FROM
+            TB_FILE
+        WHERE
+            BOARD_IDX = #{IDX}
+    ]]>
+</select>
+
+	<select id="selectFile" parameterType="hashmap" resultType="hashmap">
+	 <![CDATA[
+			SELECT 
+				FILE_NAME, STORED_FILE_NAME
+			FROM 
+				TB_FILE
+			WHERE 
+				IDX=#{IDX}
+		]]>
+	</select>
+	
+	<delete id="deleteFile" parameterType="hashmap" >
+	 <![CDATA[
+			DELETE 
+			FROM 
+				TB_FILE
+			WHERE 
+				IDX=#{DEL_FILE_IDX}
+		]]>
+	</delete>
+	
+	
+	<insert id="insertReply" parameterType="hashmap">
+    <![CDATA[
+        INSERT INTO TB_COMMENT
+        (
+            IDX,
+            BOARD_IDX,
+            PARENT_IDX,
+            INDENT,
+            CONTENTS,
+            CREA_DATE,
+            IP_ADDR
+        )
+        VALUES
+        (
+            SEQ_TB_COMMENT.NEXTVAL,
+            #{BOARD_IDX},
+            #{PARENT_IDX},
+            #{INDENT},
+            #{CONTENTS},
+            SYSDATE,
+            #{IP_ADDR}
+        )
+    ]]>
+	</insert>
+	
+	<select id="selectPWD" parameterType="hashmap" resultType="hashmap">
+	 <![CDATA[
+			SELECT 
+				PASSWORD
+			FROM 
+				TB_BOARD
+			WHERE 
+				IDX=#{IDX}
+		]]>
+	</select>
+	
+</mapper>

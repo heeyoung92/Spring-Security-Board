@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd">
+
+		<http pattern="/favicon.ico" security="none" />
+		<http pattern="/crossbrowser/**" security="none" />
+		<http pattern="/css/**" security="none" />
+		<http pattern="/fonts/**" security="none" />
+		<http pattern="/img/**" security="none" />
+		<http pattern="/js/**" security="none" />
+		<http pattern="/plugins/**" security="none" />
+
+		<http authentication-manager-ref="authenticationManager"  use-expressions="true">
+	      <intercept-url pattern="/*.login" access="isAnonymous()" />
+	      <intercept-url pattern="/*.join" access="isAnonymous()" />
+	      
+	  		<intercept-url pattern="/*.do" access="hasRole('ROLE_USER')" />
+<!-- 						    
+    <headers defaults-disabled="true">
+      <cache-control />
+      <content-type-options />
+      <frame-options policy="SAMEORIGIN"/>
+      <xss-protection />
+      <hsts include-subdomains="true" max-age-seconds="31536000" />
+     </headers> -->
+
+				<!-- 3.2 -> 4.0 바뀐점 1) CSRF 사용 여부를 표시해줘야 한다. -->
+				<!-- <csrf disabled="true" /> -->
+				<form-login 
+				    login-page="/login.login" 
+				    default-target-url="/openBoardList.do" 
+				    authentication-failure-url="/login.login?fail=true" 
+		        login-processing-url="/loginCheck.login" 
+				    username-parameter="userid" 
+				    password-parameter="userpwd" />
+				<logout 
+				    invalidate-session="true" 
+				    delete-cookies="JSESSIONID" 
+				    logout-success-url="/login.login" 
+				    logout-url="/logout.do" 
+				 />
+				
+				
+		</http>
+	 
+	 <beans:bean id="RSAUsernamePasswordAuthenticationFilter" class="com.medialog.security.filter.RSAUsernamePasswordAuthenticationFilter"/>
+		
+	<!-- XHRequest Handler -->
+		<beans:bean id="ajaxReuqestEntryPoint" class="com.medialog.security.http.XHRequestAuthenticationEntryPoint">
+    <beans:constructor-arg index="0" value="/login.login"/>
+  </beans:bean>
+		
+		
+		<!-- Expression Handler & Permission & Role Hierarchy -->
+    <beans:bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+     <beans:property name="roleHierarchy" ref="roleHierarchy" />
+    </beans:bean>
+    <beans:bean id="roleHierarchy" class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+     <beans:property name="hierarchy">
+       <beans:value>       
+          ROLE_ADMIN > ROLE_USER
+          ROLE_USER > ROLE_ANONYMOUS
+       </beans:value>
+      </beans:property> 
+    </beans:bean>
+		
+    <!-- Password HASH 설정 -->
+   <beans:bean id="passwordDigestEncoder" class="org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder" >
+     <beans:constructor-arg value="sha-512" />
+    </beans:bean>  
+
+   <!-- Authentication Manager -->
+   <beans:bean name="userService" class="com.medialog.user.UserServiceImpl"/>
+   
+	<beans:bean name="AuthenicationSerivce" class="com.medialog.security.AuthenicationSerivce">
+      <beans:constructor-arg index="0" ref="userService"/> 
+  </beans:bean>
+  
+<!--     
+    <beans:bean name="AuthenticationProvider" class="com.medialog.security.AuthenticationProvider">
+      <beans:constructor-arg index="0" ref="AuthenicationSerivce"/>  
+      <beans:property name="passwordEncoder" ref="passwordDigestEncoder"/>  
+    </beans:bean>
+ -->
+ 
+    <authentication-manager id="authenticationManager" >
+      <!--  In memory -->     
+<!--  <authentication-provider>
+        <user-service>
+          <user name="guest" password="guest" authorities="ROLE_USER"/> 
+        </user-service>
+      </authentication-provider> 
+ -->  
+      <authentication-provider user-service-ref="AuthenicationSerivce" /> 
+    </authentication-manager>
+</beans:beans>
