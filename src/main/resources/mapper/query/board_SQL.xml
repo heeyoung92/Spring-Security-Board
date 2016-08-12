@@ -99,8 +99,9 @@
     	SELECT
             IDX,
             TITLE, 
-   		 	CONTENTS,
-            CREA_DATE
+   		 	    CONTENTS,
+            CREA_DATE,
+            WRITER
         FROM
             TB_BOARD
         WHERE

@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
+<sec:authorize var="isLogin" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@ include file="../include/include-header.jspf"%>
+
 </head>
 <body>
 		<div id="wrapper">
@@ -14,11 +19,20 @@
 						</h4>
 						<div class="underline"></div>
 						<p>
+						<!-- user에 따라 유동적 레이아웃-->
+					  <sec:authentication property="name" var="userName"/>
+						<c:set var="writer">${map.WRITER}</c:set>
+
+            <c:if test="${ writer eq userName }">
+              <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="update">수정하기</a> &nbsp; 
+              <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="delete">삭제하기</a>
+            </c:if> 
+
 						<a href="openBoardList.do" class="btn btn-sm btn-info pull-right m-r-5">목록보기</a> &nbsp; 
 						<a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="replyBoard">답글쓰기</a> &nbsp;&nbsp;&nbsp; 
-						<a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="update">수정하기</a> &nbsp; 
-						<a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="delete">삭제하기</a>
-						<p>
+						
+
+        		<p>
 						
 						
 						<table class="table table-bordered">
@@ -66,9 +80,7 @@
 								<div class="container-fluid">
 										<table class="reply_list">
 										  	<c:set value='0' var="reply_total" />
-											 
 												<tbody>
-											
 														<c:choose>
 																<c:when test="${fn:length(replyList) > 0}">
 																		<c:set value="${replyList.get(0).COUNT }" var="reply_total" />
@@ -89,10 +101,7 @@
 		</div>
 		<%@ include file="../include/include-body.jspf"%>
 		<script type="text/javascript">
-			var reply_total = $
-			{
-				reply_total
-			}; //댓글 총 갯수
+			var reply_total = ${reply_total}; //댓글 총 갯수
 			var row = 5;
 
 			var board_idx = $("#IDX").val();
@@ -308,8 +317,7 @@
 				body.empty();
 
 				var str = "";
-				$
-						.each(
+				$.each(
 								data,
 								function(key, value) {
 									var num = 8 * value.INDENT;
