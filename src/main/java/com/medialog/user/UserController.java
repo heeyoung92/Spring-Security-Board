@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,16 +25,24 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.medialog.entity.UserVO;
+import com.medialog.security.EncryptUtil;
+import com.medialog.security.EncryptUtil.EnumSHA;
 
 @Controller
-public class UserController  {
+public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Resource(name="userService")
 	private UserService userService;
 	
+	@Value("#{ systemProperties['webapp.root']}")
+	private String webAppRoot;
+	
     @RequestMapping(value = "/login.login", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
+    	System.out.println(webAppRoot);
+    	System.out.println(this.getClass().getClassLoader().getResource("").toString());
+    	
 		logger.info("login {}.", locale);
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
@@ -67,10 +76,10 @@ public class UserController  {
 	@RequestMapping(value = { "/create.join" }, method = RequestMethod.POST)
 	public RedirectView postUserCreate(@ModelAttribute UserVO user, HttpServletRequest request) throws NoSuchAlgorithmException {
 		if(!userService.exists(user.getUser_id())) {
-			user.setUser_pwd(user.getUser_pwd());
+			user.setUser_pwd(EncryptUtil.sha_encrypt(user.getUser_pwd(), EnumSHA.SHA512)); 
 			user.setUser_disable_yn("N");
 			if(userService.create(user)){
-				logger.info("[USER CREATE] : {} ", user.getUser_id() );
+				logger.info("[USER CREATE] : {} {}", user.getUser_id(), user.getUser_pwd() );
 			}
 		}
 		return new RedirectView("login.login");

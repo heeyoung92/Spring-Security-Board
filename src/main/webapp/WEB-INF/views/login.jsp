@@ -44,7 +44,7 @@
                     </div>
                     <div class="login-buttons">
                         <button id="btn_login" type="submit" class="btn btn-success btn-block ">Sign me in</button>
-                        <button type="button" data-toggle="modal" data-target="#modal_userinsert" class="btn btn-success btn-block ">Join in</button>
+                        <button type="button" data-toggle="modal" data-target="#modal_userinsert" class="btn btn-success btn-block ">Sign up</button>
                    
                     </div>
 
@@ -123,12 +123,13 @@
                     data-parsley-continuous="true"
                     data-parsley-repact="true"
                     data-parsley-repact-message="같은 문자는 3번이상 반복 될 수 없습니다."
-                    data-parsley-pattern="/.*(?=.{8,})(?=.*\d)(?=.*[\W|\s])(?=.*[a-zA-Z]).*/"
-                    data-parsley-pattern-message="비밀번호는 8글자 이상, 문자, 특수문자, 숫자를 혼용하여야 합니다."
                     data-parsley-required="true" 
                     data-parsley-required-message="비밀번호를 입력하세요" />
                 </div>
               </div>
+<!--                data-parsley-pattern="/.*(?=.{8,})(?=.*\d)(?=.*[\W|\s])(?=.*[a-zA-Z]).*/"
+                    data-parsley-pattern-message="비밀번호는 8글자 이상, 문자, 특수문자, 숫자를 혼용하여야 합니다." -->
+                    
               <div class="form-group form-group-sm">
                 <label class="col-lg-2 control-label">Password Repact</label>
                 <div class="col-lg-10">

@@ -72,6 +72,9 @@
      <beans:constructor-arg value="sha-512" />
     </beans:bean>  
 
+   <!--  BCryptPasswordEncoder && StandardPasswordEncoder -->
+   <!-- <beans:bean name="cryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/> -->
+  
    <!-- Authentication Manager -->
    <beans:bean name="userService" class="com.medialog.user.UserServiceImpl"/>
    
@@ -79,12 +82,11 @@
       <beans:constructor-arg index="0" ref="userService"/> 
   </beans:bean>
   
-<!--     
     <beans:bean name="AuthenticationProvider" class="com.medialog.security.AuthenticationProvider">
       <beans:constructor-arg index="0" ref="AuthenicationSerivce"/>  
       <beans:property name="passwordEncoder" ref="passwordDigestEncoder"/>  
     </beans:bean>
- -->
+
  
     <authentication-manager id="authenticationManager" >
       <!--  In memory -->     
@@ -94,6 +96,8 @@
         </user-service>
       </authentication-provider> 
  -->  
-      <authentication-provider user-service-ref="AuthenicationSerivce" /> 
+ <authentication-provider ref="AuthenticationProvider">
+ </authentication-provider>
+      <!-- <authentication-provider user-service-ref="AuthenicationSerivce" /> --> 
     </authentication-manager>
 </beans:beans>

@@ -8,7 +8,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@ include file="../include/include-header.jspf"%>
-
 </head>
 <body>
 		<div id="wrapper">
@@ -31,9 +30,7 @@
 						<a href="openBoardList.do" class="btn btn-sm btn-info pull-right m-r-5">목록보기</a> &nbsp; 
 						<a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="replyBoard">답글쓰기</a> &nbsp;&nbsp;&nbsp; 
 						
-
         		<p>
-						
 						
 						<table class="table table-bordered">
 								<colgroup>
@@ -52,22 +49,27 @@
 												<td colspan="2"><b>첨부파일</b></td>
 										</tr>
 										<tr>
-												<td colspan="2" align="center"><c:choose>
-																<c:when test="${fn:length(list) > 0}">
-																		<c:forEach var="row" items="${list }">
-																				<p>
-																						<input type="hidden" id="IDX" value="${row.IDX }"> ${row.FILE_NAME }&nbsp;&nbsp; <a href="#this" id="download" class="btn btn-sm m-r-3" name="download">다운로드</a>
-																				</p>
-																		</c:forEach>
-																</c:when>
-																<c:otherwise>
-                		    	첨부파일이 없습니다.
-            		    	   </c:otherwise>
-														</c:choose></td>
-										</tr>
+												<td colspan="2" align="center">
+												  <c:choose>
+											   		<c:when test="${fn:length(list) > 0}">
+															<c:forEach var="row" items="${list }">
+					   										<p>
+	   															<input type="hidden" id="IDX" value="${row.IDX }"> 
+	   															${row.FILE_NAME }&nbsp;&nbsp; 
+	   															<a href="#this" id="download" class="btn btn-sm m-r-3" name="download">다운로드</a>
+																</p>
+															</c:forEach>
+														</c:when>
+												
+												  	<c:otherwise>
+                		        	첨부파일이 없습니다.
+            		    	      </c:otherwise>
+												  </c:choose>
+												 </td>
+										 </tr>
 								</tbody>
 						</table>
-						<br> <br>
+						<br><br>
 						<div class="post_opt" align="right">
 								<select id=changeListCount class="_changeListCount">
 										<option value="5">5개씩 보기</option>
@@ -173,18 +175,28 @@
 				var idx = "${map.IDX}";
 				var password = "";
 				var url2 = "<c:url value='openBoardUpdate.do' />";
-
-				password = prompt('정말 수정하시겠습니까?\n비밀번호를 입력해주세요.', '');
-				fn_checkPWD(idx, password, url2);
+		    var comSubmit = new ComSubmit("");
+        comSubmit.setUrl(url2);
+        comSubmit.addParam("IDX", idx);
+        comSubmit.submit();
+			  
+//				password = prompt('정말 수정하시겠습니까?\n비밀번호를 입력해주세요.', '');
+//				fn_checkPWD(idx, password, url2);
 			}
-
+	    
+			/* 게시글 삭제*/
 			function fn_deleteBoard() {
 				var idx = "${map.IDX}";
 				var password = "";
 				var url2 = "<c:url value='deleteBoard.do' />";
 
-				password = prompt('정말 삭제하시겠습니까?\n비밀번호를 입력해주세요.', '');
-				fn_checkPWD(idx, password, url2);
+	      var comSubmit = new ComSubmit("");
+	      comSubmit.setUrl(url2);
+	      comSubmit.addParam("IDX", idx);
+	      comSubmit.submit();
+	              
+//				password = prompt('정말 삭제하시겠습니까?\n비밀번호를 입력해주세요.', '');
+//				fn_checkPWD(idx, password, url2);
 			}
 
 			/*인증: 비밀번호 체크 */
@@ -222,7 +234,6 @@
 			function fn_downlaodFile(obj) {
 
 				var idx = obj.parent().find("#IDX").val();
-				//		alert(idx + ' 다운로드 클릭');
 
 				var comSubmit = new ComSubmit();
 				comSubmit.setUrl("<c:url value='downloadFile.do' />");
@@ -317,31 +328,29 @@
 				body.empty();
 
 				var str = "";
-				$.each(
-								data,
-								function(key, value) {
-									var num = 8 * value.INDENT;
-									var indent = "";
-									var indent2 = "";
+				$.each(data, function(key, value) {
+					  var num = 8 * value.INDENT;
+						var indent = "";
+						var indent2 = "";
 
-									for (var i = 0; i < num; i++) {
-										indent += '&nbsp;'
-										indent2 += '- '
-									}
+						for (var i = 0; i < num; i++) {
+							  indent += '&nbsp;'
+								indent2 += '- '
+						}
 
-									str += "<tr>"
-											+ "<td>"
-											+ indent
-											+ fn_toDateFormat(value.CREA_DATE)
-											+ "</br>"
-											+ indent
-											+ value.CONTENTS
-											+ "&nbsp;"
-											+ "<input type='hidden' id='IDX' value=" + value.IDX + ">"
-											+ "<input type='hidden' id='INDENT' value=" + value.INDENT + ">"
-											+ "<a href='#this' class='btn' id='re_reply'>답글</a>"
-											+ "</td>" + "</tr>";
-								});
+						str += "<tr>"
+								+ "<td>"
+								+ indent
+								+ fn_toDateFormat(value.CREA_DATE)
+								+ "</br>"
+								+ indent
+								+ value.CONTENTS
+								+ "&nbsp;"
+								+ "<input type='hidden' id='IDX' value=" + value.IDX + ">"
+								+ "<input type='hidden' id='INDENT' value=" + value.INDENT + ">"
+								+ "<a href='#this' class='btn' id='re_reply'>답글</a>"
+								+ "</td>" + "</tr>";
+						});
 				body.append(str);
 
 				$("a[id='re_reply']").on("click", function(e) {
