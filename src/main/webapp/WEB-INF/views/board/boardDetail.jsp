@@ -10,9 +10,12 @@
 <%@ include file="../include/include-header.jspf"%>
 </head>
 <body>
+
 		<div id="wrapper">
 				<jsp:include page="../include/navigator.jsp" />
 				<div class="container-fluid">
+				  <form id="frm" name="frm" enctype="multipart/form-data">
+				
 						<h4>
 								<strong><i class="fa fa-angle-double-right"></i> Board 상세 </strong>
 						</h4>
@@ -31,7 +34,6 @@
 						<a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="replyBoard">답글쓰기</a> &nbsp;&nbsp;&nbsp; 
 						
         		<p>
-						
 						<table class="table table-bordered">
 								<colgroup>
 										<col width="70%" />
@@ -92,6 +94,8 @@
 										</table>
 								</div>
 						</div>
+			</form>
+						
 						<div id="selector"></div>
 						<form class="form-inline" onsubmit="return false;">
 								<div class="form-group">
@@ -137,7 +141,7 @@
 					fn_deleteBoard();
 				});
 
-				$("#download").on("click", function(e) { //다운로드 버튼
+				$("a[id='download']").on("click", function(e) { //다운로드 버튼
 					e.preventDefault();
 					fn_downlaodFile($(this));
 				});
@@ -236,6 +240,8 @@
 				var idx = obj.parent().find("#IDX").val();
 
 				var comSubmit = new ComSubmit();
+		    $("#commonForm > #IDX").remove();   //파일 연속 다운로드 , 기존 IDX값삭제
+
 				comSubmit.setUrl("<c:url value='downloadFile.do' />");
 				comSubmit.addParam("IDX", idx);
 				comSubmit.submit();

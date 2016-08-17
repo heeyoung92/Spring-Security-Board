@@ -1,5 +1,6 @@
 package com.medialog.security;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -33,7 +34,7 @@ public class EncryptUtil {
 	public static String sha_encrypt(String planText, EnumSHA sha) throws NoSuchAlgorithmException {
 
 		MessageDigest md = MessageDigest.getInstance(sha.getValue());
-		md.update(planText.getBytes());
+		md.update(planText.getBytes(Charset.forName("UTF-8")));		// 인코딩, 환경에 따른 한글 처리 문제해결
 		byte byteData[] = md.digest();
 
 		StringBuffer sb = new StringBuffer();

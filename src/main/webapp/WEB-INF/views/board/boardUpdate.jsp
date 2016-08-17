@@ -111,8 +111,9 @@
 
 		var f_count = 0;
 		function fn_addFile() {
-			var str = "<p><input type='file' name='file_"+ (f_count++) +" '>"
-							+"<a href='#this' name='delete'>삭제</a></p>";
+			var str = "<p><input type='file' name='file_"+ (f_count++) 
+			           +"' onchange='CheckUploadFileSize(this); CheckuploadFileExt(this);'  accept='.gif, .jpg, .png'>"
+			           +"<a href='#this' name='delete'>삭제</a></p>";
 
 			$("#fileDiv").append(str);
 
@@ -132,6 +133,30 @@
 		function fn_deleteNewFile(obj) {
 			obj.parent().remove();
 		}
+		
+	  function CheckUploadFileSize(objFile)
+	  {
+	    var nMaxSize = 4 * 1024 * 1024; // 4 MB
+	    var nFileSize = objFile.files[0].size;
+	     
+	     if (nFileSize > nMaxSize){
+	       alert("4MB보다 큼!!\n" + nFileSize + " byte");
+	       objFile.outerHTML = objFile.outerHTML;
+	     }
+	 //    else alert("4MB보다 작음!!\n" + nFileSize + " byte");
+	  }
+
+	  function CheckuploadFileExt(objFile)
+	  {
+	     var strFilePath = objFile.value;
+	     
+	     // 정규식
+	     var RegExtFilter = /\.(gif|jpg|jpeg|png)$/i;  // 업로드 가능 확장자.
+	     if (strFilePath.match(RegExtFilter) == null){ 
+	       alert("첨부파일은 gif, jpg, png로 된 이미지만 가능합니다.");
+	       objFile.outerHTML = objFile.outerHTML;
+	    }
+	  }		
 	</script>
 
 

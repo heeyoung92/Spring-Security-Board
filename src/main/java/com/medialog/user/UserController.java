@@ -40,8 +40,8 @@ public class UserController {
 	
     @RequestMapping(value = "/login.login", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-    	System.out.println(webAppRoot);
-    	System.out.println(this.getClass().getClassLoader().getResource("").toString());
+//    	System.out.println(webAppRoot);
+//    	System.out.println(this.getClass().getClassLoader().getResource("").toString());
     	
 		logger.info("login {}.", locale);
 		Date date = new Date();

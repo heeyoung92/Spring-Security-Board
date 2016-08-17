@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.medialog.common.CommandMap;
+import com.medialog.common.CustomJsonUtil;
 import com.medialog.entity.UserVO;
 import com.medialog.user.UserService;
 
@@ -38,16 +40,6 @@ public class BoardController {
     private UserService userService;
 
 
-  /*  @RequestMapping(value = "/login.login", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		String formattedDate = dateFormat.format(date);
-		model.addAttribute("serverTime", formattedDate );
-		return "login";
-	}
-	*/
 	@RequestMapping(value = "/openBoardList.do*")
 	public ModelAndView openBoardList(Map<String,Object> map) throws Exception {
 		logger.info("openBoardList");
@@ -210,10 +202,9 @@ public class BoardController {
 	
 	@RequestMapping(value = "/downloadFile.do")
 	public void downloadFile(CommandMap commandMap, HttpServletResponse response) throws Exception {
-		logger.info("downladFile");
+		logger.info("downladFile " + commandMap.get("IDX"));
 
 		Map<String, Object> map = boardService.selectFile(commandMap.getMap());
-//		logger.info("FILE_NAME"+map.get("FILE_NAME"));
 		String storedFileName = map.get("STORED_FILE_NAME").toString();
 		String originalFileName = map.get("FILE_NAME").toString();
 

@@ -21,7 +21,7 @@
 	<!-- CustomMapArgumentResolver 등록 -->	
 	<mvc:annotation-driven>
 	  <mvc:argument-resolvers>
-			<bean class="com.medialog.board.CustomMapArgumentResolver"></bean>
+			<bean class="com.medialog.common.CustomMapArgumentResolver"></bean>
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
  

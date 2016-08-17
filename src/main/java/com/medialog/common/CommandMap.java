@@ -1,4 +1,4 @@
-package com.medialog.board;
+package com.medialog.common;
 
 import java.util.HashMap;
 import java.util.Map;

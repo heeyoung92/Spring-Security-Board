@@ -43,7 +43,8 @@
 				    logout-url="/logout.do" 
 				 />
 				
-				
+<!-- 				    <access-denied-handler ref="ajaxAccessDeniedHandler"/>
+ -->				
 		</http>
 	 
 	 <beans:bean id="RSAUsernamePasswordAuthenticationFilter" class="com.medialog.security.filter.RSAUsernamePasswordAuthenticationFilter"/>
