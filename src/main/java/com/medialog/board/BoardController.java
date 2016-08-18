@@ -218,7 +218,6 @@ public class BoardController {
 	     
 	    response.getOutputStream().flush();
 	    response.getOutputStream().close();
-	    
 	}
 	
 	

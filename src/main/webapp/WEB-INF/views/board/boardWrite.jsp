@@ -184,10 +184,10 @@
 		 var nFileSize = objFile.files[0].size;
 		 
 		 if (nFileSize > nMaxSize){
-			 alert("4MB보다 큼!!\n" + nFileSize + " byte");
+			 alert("4MB보다 큰 파일은 첨부할 수 없습니다.\n현재 파일 크기: " + nFileSize + " byte");
        objFile.outerHTML = objFile.outerHTML;
 		 }
- //		 else alert("4MB보다 작음!!\n" + nFileSize + " byte");
+// 		 else alert("4MB보다 작은 파일은 첨부할 수 없습니다.\n현재 파일 크기: " + nFileSize + " byte");
 		}
 
 		function CheckuploadFileExt(objFile)

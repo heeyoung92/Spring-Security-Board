@@ -125,15 +125,7 @@
 					onPageClick : fn_selectBoardList
 				});
 			});
-			function fn_toDateFormat(millis) {
-				var date = new Date(millis);
-				var dd = date.getDate();
-				var mm = (M = date.getMonth() + 1) < 10 ? ('0' + M) : M;
-				var yyyy = date.getFullYear();
-				var time = date.toTimeString().split(' ')[0];
-				date = yyyy + '-' + mm + '-' + dd + ' ' + time;
-				return date;
-			}
+
 			function fn_openBoardDetail(obj) {
 				var Parms = '?idx=' + obj.parent().find("#IDX").val();
 

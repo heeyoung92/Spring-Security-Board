@@ -18,17 +18,17 @@
 	      <intercept-url pattern="/*.join" access="isAnonymous()" />
 	      
 	  		<intercept-url pattern="/*.do" access="hasRole('ROLE_USER')" />
-<!-- 						    
-    <headers defaults-disabled="true">
+ <!--    <headers defaults-disabled="true">
       <cache-control />
       <content-type-options />
       <frame-options policy="SAMEORIGIN"/>
       <xss-protection />
       <hsts include-subdomains="true" max-age-seconds="31536000" />
-     </headers> -->
-
-				<!-- 3.2 -> 4.0 바뀐점 1) CSRF 사용 여부를 표시해줘야 한다. -->
-				<!-- <csrf disabled="true" /> -->
+     </headers>  -->
+        <!-- 3.2 -> 4.0 바뀐점 1) CSRF 사용 여부를 표시해줘야 한다. -->
+    
+ <!--    <csrf disabled="true"/> -->
+    
 				<form-login 
 				    login-page="/login.login" 
 				    default-target-url="/openBoardList.do" 
@@ -42,6 +42,7 @@
 				    logout-success-url="/login.login" 
 				    logout-url="/logout.do" 
 				 />
+				 <custom-filter ref="RSAUsernamePasswordAuthenticationFilter"  before="FORM_LOGIN_FILTER" />
 				
 <!-- 				    <access-denied-handler ref="ajaxAccessDeniedHandler"/>
  -->				

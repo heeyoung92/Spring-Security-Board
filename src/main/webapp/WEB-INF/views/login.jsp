@@ -12,7 +12,7 @@
 
 <title>SpringMVC Board Admin</title>
 </head>
-<body class="p-0 m-0 height-auto" >
+<body class="p-0 m-0 height-auto" onLoad="getid()" >
 	<div id="container">
 	    <!-- begin login -->
         <div class="login" >
@@ -28,53 +28,51 @@
 
 
             </div>
-            <!-- end brand -->
-            <div class="login-content">
-                <form name="form_login" id="form_login"  onsubmit="form_submit(); return false;"    data-parsley-validate="true" class="margin-bottom-0">
-                    <div class="form-group m-b-20">
-                        <input type="text" name="userid" class="form-control " placeholder="User ID" required="required" data-parsley-required-message="아이디를 입력하세요."/>
-                    </div>
-                    <div class="form-group m-b-20">
-                        <input type="password" name="userpwd" class="form-control " placeholder="Password" required="required" data-parsley-required-message="비밀번호를 입력하세요."/>
-                    </div>
-                    <div class="checkbox m-b-20">
-                        <label>
-                            <input id="remeber" name="remeber" type="checkbox" /> 아이디 기억
-                        </label>
-                    </div>
-                    <div class="login-buttons">
-                        <button id="btn_login" type="submit" class="btn btn-success btn-block ">Sign me in</button>
-                        <button type="button" data-toggle="modal" data-target="#modal_userinsert" class="btn btn-success btn-block ">Sign up</button>
-                   
-                    </div>
+			<!-- end brand -->
+			<div class="login-content">
+				<form name="form_login" id="form_login" onsubmit="form_submit(); return false;" data-parsley-validate="true" class="margin-bottom-0">
+					<div class="form-group m-b-20">
+						<input type="text" name="userid" class="form-control " placeholder="User ID" required="required" data-parsley-required-message="아이디를 입력하세요." />
+					</div>
+					<div class="form-group m-b-20">
+						<input type="password" name="userpwd" class="form-control " placeholder="Password" required="required" data-parsley-required-message="비밀번호를 입력하세요." />
+					</div>
+					<div class="checkbox m-b-20">
+						<label> <input id="remeber" name="remeber" type="checkbox" /> 아이디 기억
+						</label>
+					</div>
+					<div class="login-buttons">
+						<button id="btn_login" type="submit" class="btn btn-success btn-block ">Sign me in</button>
+						<button type="button" data-toggle="modal" data-target="#modal_userinsert" class="btn btn-success btn-block ">Sign up</button>
+
+					</div>
 
 
-                     <c:if test="${not empty param.fail && not empty sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message }">
-                    	<div class="form-group m-t-20 m-t-20 f-s-12 text-center">
-                    		<span class="label label-danger ">${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message }</span>
-                    	</div>
-						<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>									
+					<c:if test="${not empty param.fail && not empty sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message }">
+						<div class="form-group m-t-20 m-t-20 f-s-12 text-center">
+							<span class="label label-danger ">${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message }</span>
+						</div>
+						<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session" />
 					</c:if>
 					<c:if test="${not empty param.pwdedit }">
 						<div class="form-group m-t-20 m-t-20 f-s-12 text-center">
-                    		<span class="label label-primary ">비밀번호 변경에 성공하였습니다.</span>
-                    	</div>
-						<c:remove var="pwdedit" scope="request"/>
+							<span class="label label-primary ">비밀번호 변경에 성공하였습니다.</span>
+						</div>
+						<c:remove var="pwdedit" scope="request" />
 					</c:if>
 					<c:if test="${not empty param.pwdreset }">
 						<div class="form-group m-t-20 m-t-20 f-s-12 text-center">
-                    		<span class="label label-primary ">해당 이메일로 임시 비밀번호가 발송 되었습니다.</span>
-                    	</div>
-						<c:remove var="pwdreset" scope="request"/>
+							<span class="label label-primary ">해당 이메일로 임시 비밀번호가 발송 되었습니다.</span>
+						</div>
+						<c:remove var="pwdreset" scope="request" />
 					</c:if>
-       
-                </form>
-                <form name="form_secure" id="form_secure" action="<c:url value="/loginCheck.login"/>" method="POST">
-                	<input name="userid" type="hidden">
-                	<input name="userpwd" type="hidden">
-                </form>
-            </div>
-        </div>
+
+				</form>
+				<form name="form_secure" id="form_secure" action="<c:url value="/loginCheck.login"/>" method="POST">
+					<input name="userid" type="hidden"> <input name="userpwd" type="hidden">
+				</form>
+			</div>
+		</div>
 
         <!-- end login -->
 	</div>
@@ -169,14 +167,19 @@
 
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery.blockUI.js"></script>
   <script src="<%=request.getContextPath()%>/parsley/parsley.remote.js"></script>
-
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/rsa/jsbn.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/rsa/rsa.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/rsa/prng4.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/rsa/rng.js"></script>
+  
 	<script type="text/javascript">
  	var LoginSecureInit = function() {
-/* 		var rsaPublicKeyModulus = '${publicKeyModulus}';
+ 		var rsaPublicKeyModulus = '${publicKeyModulus}';
 		var rsaPublicKeyExponent = '${publicKeyExponent}';
 		var rsa = new RSAKey();
 		rsa.setPublic(rsaPublicKeyModulus, rsaPublicKeyExponent);
- */		return {
+
+ 		return {
 	  	openBlockUI : function() {
 				$.blockUI({ message: '<h4><img src="<c:url value="/img/loading.gif"/>" width="16px" height="16px" /> 암호화 처리중입니다. 잠시만 기다려주세요...</h4>' });
 			},
@@ -186,10 +189,12 @@
 			onSubmit : function() {
  				this.openBlockUI(); 
 				try {
-/* 				var secureid = rsa.encrypt(document.form_login.userid.value)
-					var securepwd = rsa.encrypt(document.form_login.userpwd.value) */
-					document.form_secure.userid.value = document.form_login.userid.value;
-					document.form_secure.userpwd.value = document.form_login.userpwd.value;
+  				var secureid = rsa.encrypt(document.form_login.userid.value)
+					var securepwd = rsa.encrypt(document.form_login.userpwd.value)
+					document.form_secure.userid.value = secureid;
+					document.form_secure.userpwd.value = securepwd;
+					console.log("RSA secured id: "+secureid+"\nRSA secured password: "+securepwd);
+
 					document.form_secure.submit();
 				} catch(exception) {
 					alert('RSA로 암호화 하는데 실패하였습니다. ' + exception)
@@ -199,18 +204,18 @@
 		}
 	}();
 	function form_submit() {
-/* 		if($('input[name=remeber]').is(':checked')) {
+ 		if($('input[name=remeber]').is(':checked')) {
 			$.cookie('svid', document.form_login.userid.value, {
                 "expires" : 365                
-            });	
+      });	
 		} else {
 			$.removeCookie('svid');
-		} */
-	      LoginSecureInit.onSubmit();
-
-/* 		if($('#form_login').parsley().validate()){
-		}
- */	}
+		} 
+ 		if($('#form_login').parsley().validate()){
+ 		    LoginSecureInit.onSubmit();
+ 		}
+	}
+	
 	function getid() {
 		var svid = $.cookie('svid')
 		if (svid) {
