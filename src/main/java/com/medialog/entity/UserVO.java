@@ -62,7 +62,7 @@ public class UserVO {
 
 	@Override
 	public String toString() {
-		return "MemberVO [user_id=" + user_id + ", user_name=" + user_name + ", user_pwd=" + user_pwd  
+		return "UserVO [user_id=" + user_id + ", user_name=" + user_name + ", user_pwd=" + user_pwd  
 				+ ", user_admin_level=" + user_admin_level + ", user_disable_yn=" + user_disable_yn + ", create_date=" + create_date ;
 	}
 	

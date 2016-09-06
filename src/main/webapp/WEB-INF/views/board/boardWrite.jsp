@@ -9,40 +9,37 @@
 <%@ include file="../include/include-header.jspf"%>
 </head>
 <body>
-  <div id="wrapper">
-        <jsp:include page="../include/navigator.jsp" />
-        <div class="container-fluid">
-            <h4>
-                <strong><i class="fa fa-angle-double-right"></i> Board 등록</strong>
-            </h4>
-            <div class="underline"></div>
-            <p>
-  
-	
-	<form id="frm" name="frm" enctype="multipart/form-data">
+	<div id="wrapper">
+		<jsp:include page="../include/navigator.jsp" />
+		<div class="container-fluid">
+			<h4>
+				<strong><i class="fa fa-angle-double-right"></i> Board 등록</strong>
+			</h4>
+			<div class="underline"></div>
+			<p>
+			<form id="frm" name="frm" enctype="multipart/form-data">
 
-		<input type="text"  class="form-control" placeholder="포스트 제목을 입력해주세요" id="TITLE" name="TITLE" ></input>
-		<p>
-			<textarea class="form-control" rows="15" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
-		<p>
-
-		<div id="fileDiv" class="wdp_90" align="center">
-<!-- 			<p>
+				<input type="text" class="form-control" placeholder="포스트 제목을 입력해주세요" id="TITLE" name="TITLE"/>
+				<p>
+				<textarea class="form-control" rows="15" title="내용" id="CONTENTS" name="CONTENTS"></textarea>
+				<p>
+				<div id="fileDiv" class="wdp_90" align="center">
+					<!-- 			<p>
 				<input type="file" id="file" name="file_0">
 				<a href="#this"  id="delete" name="delete">삭제</a>
-			</p> -->
-		</div>
-		
-		<a href="#this" class="btn btn-sm btn-default m-2" id="addFile">파일 추가</a> <br>
+			 </p> -->
+				</div>
 
-		<div class="wdp_90" align="right" background-color="#c0c0c0">
-			<input type="hidden" id="ID" name="ID" value='<sec:authentication property="name" /> '> 
-			<!-- Password: <input type="password" placeholder="비밀번호[필수]" id="PWD" name="PWD"></input> &nbsp;  -->
-			<a href="#this" class="btn btn-sm btn-default m-2" id="write">확인</a>
-			<a href="openBoardList.do" class="btn btn-sm btn-default m-2" id="list">작성취소</a>
+				<a href="#this" class="btn btn-sm btn-default m-2" id="addFile">파일 추가</a> <br>
+
+				<div class="wdp_90" align="right" background-color="#c0c0c0">
+					<input type="hidden" id="ID" name="ID" value='<sec:authentication property="name"/>'>
+					<!-- Password: <input type="password" placeholder="비밀번호[필수]" id="PWD" name="PWD"></input> &nbsp;  -->
+					<a href="#this" class="btn btn-sm btn-default m-2" id="write">확인</a> 
+					<a href="openBoardList.do" class="btn btn-sm btn-default m-2" id="list">작성취소</a>
+				</div>
+			</form>
 		</div>
-	</form>
-	</div>
 	</div>
 
 	<%@ include file="../include/include-body.jspf"%>
@@ -68,10 +65,10 @@
 					type : "json",
 					contentType : "application/json",
 					success : function(data) {
-				          	console.log(data); 
+				      console.log(data); 
 							$(TITLE).val("[re: ]");
-				          	$(CONTENTS).val("\n\n------원본글------\n"+"제목: "+data.TITLE+"\n내용: "+data.CONTENTS);
-				        }
+				      $(CONTENTS).val("\n\n------원본글------\n"+"제목: "+data.TITLE+"\n내용: "+data.CONTENTS);
+				  }
 				});
 			}
 		});

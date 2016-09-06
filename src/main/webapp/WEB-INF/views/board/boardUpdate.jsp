@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,47 +8,46 @@
 
 </head>
 <body>
-  <div id="wrapper">
-        <jsp:include page="../include/navigator.jsp" />
-        <div class="container-fluid">
-            <h4>
-                <strong><i class="fa fa-angle-double-right"></i> Board 수정 </strong>
-            </h4>
-            <div class="underline"></div>
-            <p>
-  
-	<form id="frm" name="frm" enctype="multipart/form-data">
-		<input type="hidden" id="IDX" name="IDX" value="${map.IDX }"></input> 
-		<input type="text" id="TITLE" name="TITLE" class="form-control" value="${map.TITLE}"></input>
-		<p>
-			<textarea rows="15" class="form-control" title="내용" id="CONTENTS" name="CONTENTS">${map.CONTENTS}</textarea>
-		<p>
+	<div id="wrapper">
+		<jsp:include page="../include/navigator.jsp" />
+		<div class="container-fluid">
+			<h4>
+				<strong><i class="fa fa-angle-double-right"></i> Board 수정 </strong>
+			</h4>
+			<div class="underline"></div>
+			<p>
+			<form id="frm" name="frm" enctype="multipart/form-data">
+				<input type="hidden" id="IDX" name="IDX" value="${map.IDX }"/> 
+				<input type="text" id="TITLE" name="TITLE" class="form-control" value="${map.TITLE}"/>
+				<p>
+					<textarea rows="15" class="form-control" title="내용" id="CONTENTS" name="CONTENTS">${map.CONTENTS}</textarea>
+				<p>
 
-		<c:choose>
-			<c:when test="${fn:length(list) > 0}">
-				<div id="fileDiv" class="wdp_90" align="center">
-					<c:forEach var="row" items="${list }">
-						<p>
-							<input type="hidden" id="IDX" value="${row.IDX }"></input>
-							${row.FILE_NAME }
-							<a href="#this" id="delete" name="delete">삭제</a>
-						</p>
-					</c:forEach>
+					<c:choose>
+						<c:when test="${fn:length(list) > 0}">
+							<div id="fileDiv" class="wdp_90" align="center">
+								<c:forEach var="row" items="${list }">
+									<p>
+										<input type="hidden" id="IDX" value="${row.IDX }"/> ${row.FILE_NAME } 
+										<a href="#this" id="delete" name="delete">삭제</a>
+									</p>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:otherwise>
+						</c:otherwise>
+					</c:choose>
+				<div id="fileDiv"></div>
+
+				<a href="#this" class="btn btn-sm btn-default m-2" id="addFile">파일 추가</a> 
+				<br>
+
+				<div class="wdp_90" align="right">
+					<a href="#this" class="btn btn-sm btn-default m-2" id="update">수정</a> 
+					<a href="openBoardList.do" class="btn btn-sm btn-default m-2" id="list">취소</a>
 				</div>
-			</c:when>
-			<c:otherwise>
-        	</c:otherwise>
-		</c:choose>
-		<div id="fileDiv"></div>
-
-		<a href="#this" class="btn btn-sm btn-default m-2" id="addFile">파일 추가</a> </br>
-		
-		<div class="wdp_90" align="right">
-			<a href="#this" class="btn btn-sm btn-default m-2" id="update">수정</a> 
-			<a href="openBoardList.do" class="btn btn-sm btn-default m-2" id="list">취소</a>
+			</form>
 		</div>
-	</form>
-	</div>
 	</div>
 
 	<%@ include file="../include/include-body.jspf"%>

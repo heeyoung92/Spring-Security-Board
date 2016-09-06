@@ -40,6 +40,7 @@ public class XHRequestAuthenticationEntryPoint extends LoginUrlAuthenticationEnt
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 		// 에러 페이지에 대한 확장자를 현재 호출한 확장자와 마추어준다.
 		if(isXHRequest(request)) {
+			logger.info("{ \"error\" : \"Session Not Exist\" }");
 			response.setStatus(HttpStatus.FORBIDDEN.value());
 			response.getWriter().write("{ \"error\" : \"Session Not Exist\" }");
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);

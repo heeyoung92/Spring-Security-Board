@@ -32,7 +32,6 @@ public class MovieController {
     private MovieService movieService;
 
 
-	@SuppressWarnings("null")
 	@RequestMapping(value = "/openMovieList.do*")
 	@ResponseBody
 	public ModelAndView openBoardList(Map<String,Object> map) throws Exception {
@@ -50,7 +49,7 @@ public class MovieController {
 			System.out.println("Movies from 2013");
 			iterator = items.iterator();
 			
-			int i=0;
+			//int i=0;
 			while (iterator.hasNext()) {
 				item = iterator.next();
 				MovieVO movie = new MovieVO();
@@ -58,7 +57,7 @@ public class MovieController {
 				movie.setImage_url((String) item.getMap("info").get("image_url"));
 				movie.setPlot((String) item.getMap("info").get("plot"));
 
-				i++;	
+	//			i++;	
 				list.add(movie);
 				System.out.println(item.getNumber("year") + ": " + item.getString("title") +", " + item.getMap("info").get("directors"));
 			}

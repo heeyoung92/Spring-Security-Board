@@ -60,6 +60,11 @@ public class UserController {
 		return null;
 
 	}
+	
+	@RequestMapping(value = { "/access_deny.login" }, method = RequestMethod.GET)
+	public ModelAndView getAccessDeny() {
+		return new ModelAndView("/access_deny");
+	}
 /*	@RequestMapping(value = { "/user/list" }, method = RequestMethod.GET)
 	public ModelAndView getUserList(
 			@RequestParam(defaultValue="1") int page,

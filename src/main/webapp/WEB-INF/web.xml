@@ -24,19 +24,21 @@
 		</filter-mapping>
 		
 		<session-config>
-      <session-timeout>5</session-timeout>
+      <session-timeout>30</session-timeout>
     </session-config>
 		
+		<!-- ContextLoaderListener가 이용할 파라미터 (서비스계층과 데이터액세스 계층등 웹 환경과 직접 관련이 없는 모든 빈을 등록) -->
 		<context-param>
 				<param-name>contextConfigLocation</param-name>
 				<param-value>classpath*:config/spring/context-*.xml</param-value>
 		</context-param>
+		<!-- contextClass(default): XmlWebApplicationContext -->
 		
 		<listener>
 				<listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
 		</listener>
 		<listener>
-				<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+				<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class> <!-- 구동시 자동으로 루트 애플리케이션 컨텍스트를 만들고 초기화 -->
 		</listener>
 		<listener>
 				<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
@@ -49,19 +51,14 @@
 						<param-name>contextConfigLocation</param-name>
 						<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 				</init-param>
-				<load-on-startup>1</load-on-startup>
+				<load-on-startup>1</load-on-startup> <!-- 0 이상 값, 작은 수 우선 -->
 		</servlet>
 		<servlet-mapping>
 				<servlet-name>appServlet</servlet-name>
 				<url-pattern>/</url-pattern>
 		</servlet-mapping>
-		<servlet-mapping>
-				<servlet-name>default</servlet-name>
-				<url-pattern>*.css</url-pattern>
-				<url-pattern>*.js</url-pattern>
-				<!-- <url-pattern>*.gif</url-pattern> -->
-		</servlet-mapping>
-		<error-page>
+
+ 		<error-page>
 				<error-code>400</error-code>
 				<location>/WEB-INF/errorPage.jsp</location>
 		</error-page>

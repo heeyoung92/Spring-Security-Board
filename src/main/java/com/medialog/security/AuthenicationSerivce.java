@@ -31,6 +31,7 @@ public class AuthenicationSerivce implements UserDetailsService {
 		super();
 		this.userService = userService;
 	}
+	
 	private UserService userService;
 
 	

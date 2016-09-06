@@ -7,7 +7,9 @@ import java.security.NoSuchAlgorithmException;
 public class EncryptUtil {
 	
 	private static EncryptUtil _INSTANCE = null;
+	
 	private EncryptUtil() {}
+	
 	public static  EncryptUtil getInstance() {
 		if (_INSTANCE == null) {
 			_INSTANCE = new EncryptUtil();

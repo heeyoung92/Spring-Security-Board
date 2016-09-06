@@ -31,6 +31,7 @@ public class BoardServiceImpl implements BoardService{
 	    List<Map<String,Object>> list = fileUtils.parseInsertFileInfo(map, request);
         for(int i=0, size=list.size(); i<size; i++){
             boardDAO.insertFile(list.get(i));
+            
         }
         
 /*	    MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)request;
@@ -53,6 +54,7 @@ public class BoardServiceImpl implements BoardService{
 		// TODO Auto-generated method stub
 		return boardDAO.selectBoardList(map); 
 	}
+	
 	@Override
 	public List<Map<String, Object>> selectBoardPaging(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub

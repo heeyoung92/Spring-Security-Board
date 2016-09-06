@@ -11,102 +11,107 @@
 </head>
 <body>
 
-		<div id="wrapper">
-				<jsp:include page="../include/navigator.jsp" />
-				<div class="container-fluid">
-				  <form id="frm" name="frm" enctype="multipart/form-data">
-				
-						<h4>
-								<strong><i class="fa fa-angle-double-right"></i> Board 상세 </strong>
-						</h4>
-						<div class="underline"></div>
-						<p>
-						<!-- user에 따라 유동적 레이아웃-->
-					  <sec:authentication property="name" var="userName"/>
-						<c:set var="writer">${map.WRITER}</c:set>
+	<div id="wrapper">
+		<jsp:include page="../include/navigator.jsp" />
+		<div class="container-fluid">
+			<form id="frm" name="frm" enctype="multipart/form-data">
 
-            <c:if test="${ writer eq userName }">
-              <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="update">수정하기</a> &nbsp; 
-              <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="delete">삭제하기</a>
-            </c:if> 
+				<h4>
+					<strong><i class="fa fa-angle-double-right"></i> Board 상세 </strong>
+				</h4>
+				<div class="underline"></div>
+				<p>
+					<!-- user에 따라 유동적 레이아웃-->
+					<sec:authentication property="name" var="userName" />
+					<c:set var="writer">${map.WRITER}</c:set>
 
-						<a href="openBoardList.do" class="btn btn-sm btn-info pull-right m-r-5">목록보기</a> &nbsp; 
-						<a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="replyBoard">답글쓰기</a> &nbsp;&nbsp;&nbsp; 
-						
-        		<p>
-						<table class="table table-bordered">
-								<colgroup>
-										<col width="70%" />
-										<col width="*" />
-								</colgroup>
-								<tbody>
-										<tr>
-												<td><b>${map.TITLE }</b> <input type="hidden" id="IDX" value="${map.IDX }"></td>
-												<td>${map.CREA_DATE }</td>
-										</tr>
-										<tr>
-												<td colspan="2"><pre>${map.CONTENTS }</pre></td>
-										</tr>
-										<tr>
-												<td colspan="2"><b>첨부파일</b></td>
-										</tr>
-										<tr>
-												<td colspan="2" align="center">
-												  <c:choose>
-											   		<c:when test="${fn:length(list) > 0}">
-															<c:forEach var="row" items="${list }">
-					   										<p>
-	   															<input type="hidden" id="IDX" value="${row.IDX }"> 
-	   															${row.FILE_NAME }&nbsp;&nbsp; 
-	   															<a href="#this" id="download" class="btn btn-sm m-r-3" name="download">다운로드</a>
-																</p>
-															</c:forEach>
-														</c:when>
-												
-												  	<c:otherwise>
-                		        	첨부파일이 없습니다.
-            		    	      </c:otherwise>
-												  </c:choose>
-												 </td>
-										 </tr>
-								</tbody>
-						</table>
-						<br><br>
-						<div class="post_opt" align="right">
-								<select id=changeListCount class="_changeListCount">
-										<option value="5">5개씩 보기</option>
-										<option value="10">10개씩 보기</option>
-										<option value="15">15개씩 보기</option>
-								</select>
-						</div>
-						<b> Comments</b>
-						<div class="panel panel-primary">
-								<div class="container-fluid">
-										<table class="reply_list">
-										  	<c:set value='0' var="reply_total" />
-												<tbody>
-														<c:choose>
-																<c:when test="${fn:length(replyList) > 0}">
-																		<c:set value="${replyList.get(0).COUNT }" var="reply_total" />
-																</c:when>
-														</c:choose>
-												</tbody>
-										</table>
-								</div>
-						</div>
-			</form>
-						
-						<div id="selector"></div>
-						<form class="form-inline" onsubmit="return false;">
-								<div class="form-group">
-									 <input type="text" id="REPLY_CONT" name="REPLY_CONT" class="form-control" onsubmit="return false;"></input>&nbsp;
-										<a href="#this" class="btn btn-sm btn-default m-r-2" id="writeReply">댓글추가</a>
-								</div>
-						</form>
+					<c:if test="${ writer eq userName }">
+					   <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="update">수정하기</a> &nbsp; 
+             <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="delete">삭제하기</a>
+					</c:if>
+
+					<a href="openBoardList.do" class="btn btn-sm btn-info pull-right m-r-5">목록보기</a> &nbsp; <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="replyBoard">답글쓰기</a> &nbsp;&nbsp;&nbsp;
+				<p>
+				<table class="table table-bordered">
+					<colgroup>
+						<col width="70%" />
+						<col width="*" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<td>
+								<b>${map.TITLE }</b> <input type="hidden" id="IDX" value="${map.IDX }">
+							</td>
+							<td>${map.CREA_DATE }</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<pre>${map.CONTENTS }</pre>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<b>첨부파일</b>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">
+								<c:choose>
+									<c:when test="${fn:length(list) > 0}">
+										<c:forEach var="row" items="${list }">
+											<p>
+												<input type="hidden" id="IDX" value="${row.IDX }"> 
+												${row.FILE_NAME }&nbsp;&nbsp; 
+												<a href="#this" id="download" class="btn btn-sm m-r-3" name="download">다운로드</a>
+											</p>
+										</c:forEach>
+									</c:when>
+
+									<c:otherwise>
+         	        	첨부파일이 없습니다.
+            		  </c:otherwise>
+								</c:choose>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<br>
+				<br>
+				<div class="post_opt" align="right">
+					<select id=changeListCount class="_changeListCount">
+						<option value="5">5개씩 보기</option>
+						<option value="10">10개씩 보기</option>
+						<option value="15">15개씩 보기</option>
+					</select>
 				</div>
+				<b> Comments</b>
+				<div class="panel panel-primary">
+					<div class="container-fluid">
+						<table class="reply_list">
+							<c:set value='0' var="reply_total" />
+							<tbody>
+								<c:choose>
+									<c:when test="${fn:length(replyList) > 0}">
+										<c:set value="${replyList.get(0).COUNT }" var="reply_total" />
+									</c:when>
+								</c:choose>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</form>
+
+			<div id="selector"></div>
+			<form class="form-inline" onsubmit="return false;">
+				<div class="form-group">
+					<input type="text" id="REPLY_CONT" name="REPLY_CONT" class="form-control" onsubmit="return false;"></input>&nbsp; 
+					<a href="#this" class="btn btn-sm btn-default m-r-2" id="writeReply">댓글추가</a>
+				</div>
+			</form>
 		</div>
-		<%@ include file="../include/include-body.jspf"%>
-		<script type="text/javascript">
+	</div>
+	<%@ include file="../include/include-body.jspf"%>
+	<script type="text/javascript">
 			var reply_total = ${reply_total}; //댓글 총 갯수
 			var row = 5;
 

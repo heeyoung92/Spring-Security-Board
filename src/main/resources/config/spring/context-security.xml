@@ -13,20 +13,28 @@
 		<http pattern="/js/**" security="none" />
 		<http pattern="/plugins/**" security="none" />
 
-		<http authentication-manager-ref="authenticationManager"  use-expressions="true">
+		<http entry-point-ref="ajaxReuqestEntryPoint" authentication-manager-ref="authenticationManager"  use-expressions="true">
 	      <intercept-url pattern="/*.login" access="isAnonymous()" />
 	      <intercept-url pattern="/*.join" access="isAnonymous()" />
 	      
 	  		<intercept-url pattern="/*.do" access="hasRole('ROLE_USER')" />
- <!--    <headers defaults-disabled="true">
-      <cache-control />
-      <content-type-options />
-      <frame-options policy="SAMEORIGIN"/>
-      <xss-protection />
-      <hsts include-subdomains="true" max-age-seconds="31536000" />
-     </headers>  -->
+		    <headers>
+			  	<cache-control />
+				  <content-type-options />
+				  <frame-options policy="SAMEORIGIN" />
+				  <xss-protection />
+				  <hsts include-subdomains="true" max-age-seconds="31536000" />
+		    </headers>
+		    
+<!--    <headers defaults-disabled="true">
+          <cache-control />
+          <content-type-options />
+          <frame-options policy="SAMEORIGIN"/>
+          <xss-protection />
+          <hsts include-subdomains="true" max-age-seconds="31536000" />
+        </headers>  -->
+
         <!-- 3.2 -> 4.0 바뀐점 1) CSRF 사용 여부를 표시해줘야 한다. -->
-    
  <!--    <csrf disabled="true"/> -->
     
 				<form-login 
@@ -43,21 +51,23 @@
 				    logout-url="/logout.do" 
 				 />
 				 <custom-filter ref="RSAUsernamePasswordAuthenticationFilter"  before="FORM_LOGIN_FILTER" />
-				
-<!-- 				    <access-denied-handler ref="ajaxAccessDeniedHandler"/>
- -->				
-		</http>
+ 	       <access-denied-handler ref="ajaxAccessDeniedHandler"/>
+ 	  </http>
 	 
 	 <beans:bean id="RSAUsernamePasswordAuthenticationFilter" class="com.medialog.security.filter.RSAUsernamePasswordAuthenticationFilter"/>
 		
 	<!-- XHRequest Handler -->
-		<beans:bean id="ajaxReuqestEntryPoint" class="com.medialog.security.http.XHRequestAuthenticationEntryPoint">
+	 <beans:bean id="ajaxAccessDeniedHandler" class="com.medialog.security.http.XHRequestAccessDeniedHandler">
+    <beans:property name="errorPage" value="/access_deny.login"/>
+   </beans:bean>
+  
+	 <beans:bean id="ajaxReuqestEntryPoint" class="com.medialog.security.http.XHRequestAuthenticationEntryPoint">
     <beans:constructor-arg index="0" value="/login.login"/>
-  </beans:bean>
+   </beans:bean>
 		
-		
+		 <!-- 꼭 필요한가? -->
 		<!-- Expression Handler & Permission & Role Hierarchy -->
-    <beans:bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+ <!--    <beans:bean id="expressionHandler" class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
      <beans:property name="roleHierarchy" ref="roleHierarchy" />
     </beans:bean>
     <beans:bean id="roleHierarchy" class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
@@ -67,16 +77,14 @@
           ROLE_USER > ROLE_ANONYMOUS
        </beans:value>
       </beans:property> 
-    </beans:bean>
+    </beans:bean> -->
 		
     <!-- Password HASH 설정 -->
    <beans:bean id="passwordDigestEncoder" class="org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder" >
      <beans:constructor-arg value="sha-512" />
     </beans:bean>  
 
-   <!--  BCryptPasswordEncoder && StandardPasswordEncoder -->
-   <!-- <beans:bean name="cryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/> -->
-  
+    
    <!-- Authentication Manager -->
    <beans:bean name="userService" class="com.medialog.user.UserServiceImpl"/>
    
@@ -98,8 +106,7 @@
         </user-service>
       </authentication-provider> 
  -->  
- <authentication-provider ref="AuthenticationProvider">
- </authentication-provider>
+      <authentication-provider ref="AuthenticationProvider"/>
       <!-- <authentication-provider user-service-ref="AuthenicationSerivce" /> --> 
     </authentication-manager>
 </beans:beans>

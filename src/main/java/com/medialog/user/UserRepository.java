@@ -3,7 +3,7 @@ package com.medialog.user;
 import org.springframework.stereotype.Repository;
 import com.medialog.entity.UserVO;
 
-@Repository("userRepository")
+@Repository
 public interface UserRepository {
 
 	public UserVO getUser(String user_id);

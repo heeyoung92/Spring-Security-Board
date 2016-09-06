@@ -7,92 +7,95 @@
 <%@ include file="../include/include-header.jspf"%>
 </head>
 <body>
-		<div id="wrapper">
-				<jsp:include page="../include/navigator.jsp" />
-				<div class="container-fluid">
-						<h4>
-								<strong><i class="fa fa-angle-double-right"></i> Board 리스트 </strong>
-						</h4>
-						<div class="underline"></div>
-						<p>
-						<div class="row m-b-10">
-								<a href="openBoardWrite.do?idx=" class="btn btn-sm btn-info pull-right m-r-5" id="write">게시글 작성</a>
-						</div>
-						<c:choose>
-								<c:when test="${fn:length(list) > 0}">
-										<c:set value="${list.get(0).COUNT }" var="total" />
-								</c:when>
-								<c:otherwise>
-										<c:set value='0' var="total" />
-								</c:otherwise>
-						</c:choose>
-						<div class="panel panel-primary">
-								<div class="panel-heading">
-										<h6 class="panel-title f-s-14">
-												<i class="fa fa-table"></i> 전체보기 <span class="pull-right"> <span class="label label-success ">TOTAL : ${total}</span>
-												</span>
-										</h6>
-								</div>
-								<div class="panel-body">
-										<form action="openBoardDetail" method="post">
-												<table id="board_list" class="table table-hover table-striped">
-														<colgroup>
-																<col width="*" />
-																<col width="15%" />
-																<col width="10%" />
-																<col width="20%" />
-														</colgroup>
-														<thead>
-																<tr>
-																		<th scope="col">제목</th>
-																		<th scope="col">작성자</th>
-																		<th scope="col">조회수</th>
-																		<th scope="col">날짜</th>
-																</tr>
-														</thead>
-														<tbody>
-																<c:choose>
-																		<c:when test="${fn:length(list) > 0}">
-																				<c:forEach items="${list }" var="row">
-																						<tr><td class="title">
-																						<a href="openBoardDetail.do" name="title"> 
-																								<c:forEach var="str" begin="2" end="${row.LEVEL }" step="1">&nbsp;&nbsp;&nbsp;
-									                              </c:forEach>${row.TITLE }
-									                           </a> 
-									                            <input type="hidden" id="IDX" value="${row.IDX }"> 
-									                            <td>${row.WRITER }</td>
-																				  		<td>${row.HIT_CNT }</td>
-																							<td>${row.CREA_DATE }</td>
-																						</tr>
-																				</c:forEach>
-																		</c:when>
-																		<c:otherwise>
-																				<tr>
-																						<td colspan="4">조회된 결과가 없습니다.</td>
-																				</tr>
-																		</c:otherwise>
-																</c:choose>
-														</tbody>
-										</table>
-										</form>
-										
-										<p>
-										
-										<div class="dropdown" align="right">
-												<select id=changeListCount class="_changeListCount">
-														<option value="10">10줄 보기</option>
-														<option value="15">15줄 보기</option>
-														<option value="20">20줄 보기</option>
-												</select>
-										</div>
-										<div id="selector" align="center"></div>
-								</div>
-						</div>
+	<div id="wrapper">
+		<jsp:include page="../include/navigator.jsp" />
+		<div class="container-fluid">
+			<h4>
+				<strong><i class="fa fa-angle-double-right"></i> Board 리스트 </strong>
+			</h4>
+			<div class="underline"></div>
+			<p>
+			<div class="row m-b-10">
+				<a href="openBoardWrite.do?idx=" class="btn btn-sm btn-info pull-right m-r-5" id="write">게시글 작성</a>
+			</div>
+			<c:choose>
+				<c:when test="${fn:length(list) > 0}">
+					<c:set value="${list.get(0).COUNT }" var="total" />
+				</c:when>
+				<c:otherwise>
+					<c:set value='0' var="total" />
+				</c:otherwise>
+			</c:choose>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h6 class="panel-title f-s-14">
+						<i class="fa fa-table"></i> 전체보기 
+						<span class="pull-right"> 
+						  <span class="label label-success ">TOTAL : ${total}</span>
+						  <button type="button" class="btn btn-xs btn-info" id="excelDownBtn_list">Excel Download</button>
+						</span>
+					</h6>
 				</div>
-		</div>
+				<div class="panel-body">
+					<form action="openBoardDetail" method="post">
+						<table id="board_list" class="table table-hover table-striped">
+							<colgroup>
+								<col width="*" />
+								<col width="15%" />
+								<col width="10%" />
+								<col width="20%" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">제목</th>
+									<th scope="col">작성자</th>
+									<th scope="col">조회수</th>
+									<th scope="col">날짜</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:choose>
+									<c:when test="${fn:length(list) > 0}">
+										<c:forEach items="${list }" var="row">
+											<tr>
+												<td class="title">
+													<a href="openBoardDetail.do" name="title"> 
+													<c:forEach var="str" begin="2" end="${row.LEVEL }" step="1"> &nbsp;&nbsp;&nbsp; </c:forEach>
+									        ${row.TITLE }
+													</a> 
+													<input type="hidden" id="IDX" value="${row.IDX }">
+												<td>${row.WRITER }</td>
+												<td>${row.HIT_CNT }</td>
+												<td>${row.CREA_DATE }</td>
+											</tr>
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+										<tr>
+											<td colspan="4">조회된 결과가 없습니다.</td>
+										</tr>
+									</c:otherwise>
+								</c:choose>
+							</tbody>
+						</table>
+					</form>
 
-<%@ include file="../include/include-body.jspf"%>
-		<script type="text/javascript">
+					<p>
+					<div class="dropdown" align="right">
+						<select id=changeListCount class="_changeListCount">
+							<option value="10">10줄 보기</option>
+							<option value="15">15줄 보기</option>
+							<option value="20">20줄 보기</option>
+						</select>
+					</div>
+					<div id="selector" align="center"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<%@ include file="../include/include-body.jspf"%>
+	<script type="text/javascript">
 			var total = ${total}; // 게시글 수
 			var row = 10; //paging 행 개수
 
@@ -115,6 +118,14 @@
 					$(selector).pagination('updateItemsOnPage', row);
 					fn_selectBoardList($(this));
 				});
+	
+				$('#excelDownBtn_list').click(function(){
+				  var param = "?page_index=" + 1;
+				  param += '&page_row=' + ${total};
+				  
+				  location.href = "/board/downloadExcelFile.do"+param;
+	        return;
+	      });
 			});
 
 			$(function() {
@@ -125,13 +136,14 @@
 					onPageClick : fn_selectBoardList
 				});
 			});
+			
+			
 
 			function fn_openBoardDetail(obj) {
 				var Parms = '?idx=' + obj.parent().find("#IDX").val();
 
 				var comSubmit = new ComSubmit();
-				comSubmit
-						.setUrl("<c:url value='/openBoardDetail.do"+Parms+"' />");
+				comSubmit.setUrl("<c:url value='/openBoardDetail.do"+Parms+"' />");
 				comSubmit.submit();
 
 			}
@@ -207,5 +219,5 @@
 			}
 		</script>
 
-																								</body>
+</body>
 </html>

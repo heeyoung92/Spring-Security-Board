@@ -40,6 +40,7 @@ public class MovieVO {
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
+	
 	public String getPlot() {
 		return plot;
 	}
@@ -47,7 +48,8 @@ public class MovieVO {
 	public void setPlot(String plot) {
 		this.plot = plot;
 	}
-		@Override
+	
+	@Override
 	public String toString() {
 		return "MovieVO [title=" + title + "]";
 	}

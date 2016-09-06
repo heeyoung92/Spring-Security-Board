@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-@Repository("boardDAO")
+@Repository
 public class BoardDAO {
     
 	@Autowired
@@ -53,7 +53,7 @@ public class BoardDAO {
 	     
 //        logger.info("Board Start : "+ map.get("START") +", END: "+ map.get("END"));
 
-
+	    String buy = "swim 4 + flymo 10 + shoese 3 + hagang 5 // onepiece for wedding 6 shoese 3 // flymodel 10  // one 6 hair 4 //";
 		return  (List<Map<String, Object>>)selectList("board.selectBoardPaging", map);
 	}
 	
@@ -81,6 +81,7 @@ public class BoardDAO {
     public List selectList(String queryId, Object params){
         return sqlSession.selectList(queryId,params);
     }
+    
     public Object selectOne(String queryId, Object params){
         return sqlSession.selectOne(queryId, params);
     }
