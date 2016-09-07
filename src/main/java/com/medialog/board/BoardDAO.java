@@ -53,7 +53,6 @@ public class BoardDAO {
 	     
 //        logger.info("Board Start : "+ map.get("START") +", END: "+ map.get("END"));
 
-	    String buy = "swim 4 + flymo 10 + shoese 3 + hagang 5 // onepiece for wedding 6 shoese 3 // flymodel 10  // one 6 hair 4 //";
 		return  (List<Map<String, Object>>)selectList("board.selectBoardPaging", map);
 	}
 	

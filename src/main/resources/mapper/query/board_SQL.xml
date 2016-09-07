@@ -4,24 +4,24 @@
 <mapper namespace="board">
 	
 	<select id="selectBoardPaging" parameterType="hashmap" resultType="hashmap">
-	 <![CDATA[
 		SELECT *
 		from (SELECT rownum rnum, pagetable.* , COUNT(*) OVER() AS COUNT
 			FROM (
   				SELECT LEVEL, IDX, PARENT_IDX,TITLE, HIT_CNT, CREA_DATE, WRITER
     			FROM TB_BOARD
-    			START WITH 
-  					PARENT_IDX IS NULL
-				CONNECT BY PRIOR  
-					IDX = PARENT_IDX
-				ORDER SIBLINGS BY CREA_DATE DESC
+    	    <if test="keyword != null">
+             WHERE REGEXP_LIKE(TITLE, #{keyword}, 'i')
+          </if>
+    			START WITH PARENT_IDX IS NULL
+				  CONNECT BY PRIOR IDX = PARENT_IDX
+				  ORDER SIBLINGS BY CREA_DATE DESC
     		) pagetable
-		)
+		  )
+   <![CDATA[
 		where rnum <= #{END}  AND rnum >= #{START}
 		]]>
 	</select>
-	
-	
+  
 	<select id="selectReplyList" parameterType="hashmap" resultType="hashmap">
 	 <![CDATA[
 		 select *

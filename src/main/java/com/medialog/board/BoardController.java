@@ -63,7 +63,8 @@ public class BoardController {
 	@ResponseBody
 	public  List<Map<String,Object>> selectBoardPaging(
 			@RequestParam int page_index, // Ajax
-			@RequestParam int page_row 
+			@RequestParam int page_row ,
+			@RequestParam(value="keyword",required=false ) String keyword 
 			) throws Exception {
 
 		logger.info("selectBoardPaging");
@@ -71,9 +72,14 @@ public class BoardController {
 		Map<String, Object > map = new HashMap<String,Object>();
 		map.put("page_index", page_index);
 		map.put("page_row", page_row);
+		
+		map.put("keyword", keyword);
+		if(keyword != null){
+			logger.info("keyword: "+ keyword);
+			map.put("page_index", 1);
+		}
 
 		List<Map<String,Object>> list = boardService.selectBoardPaging(map);
-
 		return list;
 	}
 

@@ -14,10 +14,26 @@
 				<strong><i class="fa fa-angle-double-right"></i> Board 리스트 </strong>
 			</h4>
 			<div class="underline"></div>
-			<p>
-			<div class="row m-b-10">
-				<a href="openBoardWrite.do?idx=" class="btn btn-sm btn-info pull-right m-r-5" id="write">게시글 작성</a>
+
+			<div class="row p-10">
+				<div class="col-lg-12">
+					<blockquote class="f-s-16">
+						<input type="hidden" name="page" value="1" />
+						<div style="height: 5px;"></div>
+						<div class="form-group p-r-10">
+							<label class="p-r-5">제목</label>
+							<input id="keyword" type="text" class="form-control input-sm" placeholder="Board Title" value="">
+						</div>
+						<div class="form-group">
+							<button type="button" id="search" class="btn btn-sm btn-primary">검색</button>
+						</div>
+						<div class="row m-b-10">
+							<a href="openBoardWrite.do?idx=" class="btn btn-sm btn-info pull-right m-r-5" id="write">게시글 작성</a>
+						</div>
+					</blockquote>
+				</div>
 			</div>
+
 			<c:choose>
 				<c:when test="${fn:length(list) > 0}">
 					<c:set value="${list.get(0).COUNT }" var="total" />
@@ -110,13 +126,13 @@
 
 				$("a[id='page']").on("click", function(e) { //paging
 					e.preventDefault();
-					fn_selectBoardList($(this));
+//					fn_selectBoardList($(this));
 				});
 
 				$('#changeListCount').change(function() { // paging row 값 변경
 					row = $('#changeListCount option:selected').val();
 					$(selector).pagination('updateItemsOnPage', row);
-					fn_selectBoardList($(this));
+//					fn_selectBoardList($(this));
 				});
 	
 				$('#excelDownBtn_list').click(function(){
@@ -126,6 +142,12 @@
 				  location.href = "/board/downloadExcelFile.do"+param;
 	        return;
 	      });
+				
+			  $('#search').click(function(){
+		      $(selector).pagination('selectPage', 1);
+//				  fn_selectBoardList($(this));
+
+			  });
 			});
 
 			$(function() {
@@ -137,6 +159,12 @@
 				});
 			});
 			
+/* 			$(function() {
+	        $(selector).pagination({
+	            onPageClick : fn_selectBoardList
+	         });
+			});
+ */			
 			
 
 			function fn_openBoardDetail(obj) {
@@ -148,13 +176,9 @@
 
 			}
 
-			//		var pageNo =1;
 			function fn_selectBoardList() {
 
 				var pageNo = $(selector).pagination('getCurrentPage');
-
-				//			if(!pageNo) pageNo=1;
-				//	        pagingDiv(pageNo, row);
 
 				if (window.XMLHttpRequest) { // Mozilla, Safari, ...
 					httpRequest = new XMLHttpRequest();
@@ -175,7 +199,8 @@
 
 				var Parms = '?page_index=' + pageNo;
 				Parms += '&page_row=' + row;
-
+				if($("#keyword").val()!='')
+					  Parms +='&keyword='+ $("#keyword").val();
 				$.ajax({
 					url : "selectBoardPaging.do" + Parms,
 					method : "post",
@@ -192,6 +217,7 @@
 
 				var str = "";
 				$.each(data,function(key, value) {
+					  total = value.COUNT;
 					  var indent = "";
 						for (var i = 1; i < value.LEVEL; i++) {
 							indent += '&nbsp;&nbsp;&nbsp;'
@@ -212,6 +238,12 @@
 					});
 				body.append(str);
 
+				if(keyword != null){
+					console.log(total)
+/* 					 $(selector).pagination('updateItems',total);
+				   $(selector).pagination('selectPage', 1);
+ */
+				}
 				$("a[name='title']").on("click", function(e) { //제목 
 					e.preventDefault();
 					fn_openBoardDetail($(this));
