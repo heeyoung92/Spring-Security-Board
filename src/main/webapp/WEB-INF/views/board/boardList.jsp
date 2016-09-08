@@ -18,6 +18,8 @@
 			<div class="row p-10">
 				<div class="col-lg-12">
 					<blockquote class="f-s-16">
+						<form class="form-inline clearfix">
+					 
 						<input type="hidden" name="page" value="1" />
 						<div style="height: 5px;"></div>
 						<div class="form-group p-r-10">
@@ -27,6 +29,7 @@
 						<div class="form-group">
 							<button type="button" id="search" class="btn btn-sm btn-primary">검색</button>
 						</div>
+						</form>
 						<div class="row m-b-10">
 							<a href="openBoardWrite.do?idx=" class="btn btn-sm btn-info pull-right m-r-5" id="write">게시글 작성</a>
 						</div>
@@ -116,9 +119,6 @@
 			var row = 10; //paging 행 개수
 
 			$(document).ready(function() {
-
-				//			pagingDiv(1, row);
-
 				$("a[name='title']").on("click", function(e) { //제목 
 					e.preventDefault();
 					fn_openBoardDetail($(this));
@@ -132,6 +132,8 @@
 				$('#changeListCount').change(function() { // paging row 값 변경
 					row = $('#changeListCount option:selected').val();
 					$(selector).pagination('updateItemsOnPage', row);
+			         $(selector).pagination('updateItems',total);
+
 //					fn_selectBoardList($(this));
 				});
 	
@@ -146,7 +148,6 @@
 			  $('#search').click(function(){
 		      $(selector).pagination('selectPage', 1);
 //				  fn_selectBoardList($(this));
-
 			  });
 			});
 
@@ -159,12 +160,6 @@
 				});
 			});
 			
-/* 			$(function() {
-	        $(selector).pagination({
-	            onPageClick : fn_selectBoardList
-	         });
-			});
- */			
 			
 
 			function fn_openBoardDetail(obj) {
@@ -196,7 +191,6 @@
 					alert('Giving up :( Cannot create an XMLHTTP instance');
 					return false;
 				}
-
 				var Parms = '?page_index=' + pageNo;
 				Parms += '&page_row=' + row;
 				if($("#keyword").val()!='')
@@ -239,10 +233,7 @@
 				body.append(str);
 
 				if(keyword != null){
-					console.log(total)
-/* 					 $(selector).pagination('updateItems',total);
-				   $(selector).pagination('selectPage', 1);
- */
+  			  $(selector).pagination('updateItems',total);
 				}
 				$("a[name='title']").on("click", function(e) { //제목 
 					e.preventDefault();

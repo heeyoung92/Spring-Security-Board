@@ -76,7 +76,6 @@ public class BoardController {
 		map.put("keyword", keyword);
 		if(keyword != null){
 			logger.info("keyword: "+ keyword);
-			map.put("page_index", 1);
 		}
 
 		List<Map<String,Object>> list = boardService.selectBoardPaging(map);
