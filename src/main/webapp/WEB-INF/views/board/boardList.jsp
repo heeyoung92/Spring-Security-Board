@@ -18,18 +18,24 @@
 			<div class="row p-10">
 				<div class="col-lg-12">
 					<blockquote class="f-s-16">
+					
 						<form class="form-inline clearfix">
-					 
 						<input type="hidden" name="page" value="1" />
-						<div style="height: 5px;"></div>
 						<div class="form-group p-r-10">
-							<label class="p-r-5">제목</label>
-							<input id="keyword" type="text" class="form-control input-sm" placeholder="Board Title" value="">
+							<label class="p-r-30">제 목</label>
+							<input id="keyword" type="text" class="form-control input-sm"  placeholder="Board Title" value="">
 						</div>
-						<div class="form-group">
-							<button type="button" id="search" class="btn btn-sm btn-primary">검색</button>
-						</div>
+						  <div style="height: 5px;"></div>
+            <div class="form-group p-r-20">
+                <label class="p-r-30">날 짜</label>
+                <input id="startDate" type="text" class="form-control datetime bg-white pointer input-sm" readonly="readonly" required="required" placeholder="시작일" value="${result.param.srchCouponStartDate}">
+                <input id="endDate" type="text" class="form-control datetime bg-white pointer input-sm" readonly="readonly" required="required" placeholder="종료일" value="${result.param.srchCouponEndDate}">
+            </div>
+            <div class="form-group">
+              <button type="button" id="search" class="btn btn-sm btn-primary">검색</button>
+            </div>
 						</form>
+					
 						<div class="row m-b-10">
 							<a href="openBoardWrite.do?idx=" class="btn btn-sm btn-info pull-right m-r-5" id="write">게시글 작성</a>
 						</div>
@@ -117,8 +123,10 @@
 	<script type="text/javascript">
 			var total = ${total}; // 게시글 수
 			var row = 10; //paging 행 개수
-
+	    
 			$(document).ready(function() {
+				initDatePickerInit();
+				
 				$("a[name='title']").on("click", function(e) { //제목 
 					e.preventDefault();
 					fn_openBoardDetail($(this));
@@ -149,8 +157,35 @@
 		      $(selector).pagination('selectPage', 1);
 //				  fn_selectBoardList($(this));
 			  });
+			  
 			});
-
+			
+			// color picker - yyyy/mm/dd 형식    
+		  var initDatePickerInit = function() {
+		      var options = {
+            //minDate: moment(),
+            maxDate: moment().add(250, 'days'),
+            showWeekNumbers : false,
+            singleDatePicker : true,
+            //timePicker: true,
+            //timePickerIncrement: 1,
+            //timePicker12Hour: false,
+            format: 'YYYY/MM/DD',
+            opens: 'center',
+            locale: {
+                applyLabel: '적용',
+                cancelLabel: '초기화',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: '편집',
+                daysOfWeek: ['일', '월', '화', '수', '목', '금','토'],
+                monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                firstDay: 1
+            }
+        }
+        $('.datetime').daterangepicker($.extend(options, { timePicker: false, format : 'YYYY/MM/DD' }));
+        //$('.date').daterangepicker($.extend(options, { timePicker: false, format : 'YYYY/MM/DD' }));
+    }
 			$(function() {
 				$(selector).pagination({
 					items : total,
@@ -161,7 +196,6 @@
 			});
 			
 			
-
 			function fn_openBoardDetail(obj) {
 				var Parms = '?idx=' + obj.parent().find("#IDX").val();
 
@@ -193,8 +227,14 @@
 				}
 				var Parms = '?page_index=' + pageNo;
 				Parms += '&page_row=' + row;
+				// 검색조건이 있을 경우
 				if($("#keyword").val()!='')
 					  Parms +='&keyword='+ $("#keyword").val();
+		    if($("#startDate").val()!='')
+		        Parms +='&startDate='+ $("#startDate").val();
+        if($("#endDate").val()!='')
+            Parms +='&endDate='+ $("#endDate").val();
+
 				$.ajax({
 					url : "selectBoardPaging.do" + Parms,
 					method : "post",
@@ -232,9 +272,11 @@
 					});
 				body.append(str);
 
-				if(keyword != null){
+				//검색 결과에 따른 Total수 변경 for Paging
+				if(keyword != null || startDate != null || endDate != null){
   			  $(selector).pagination('updateItems',total);
 				}
+				
 				$("a[name='title']").on("click", function(e) { //제목 
 					e.preventDefault();
 					fn_openBoardDetail($(this));

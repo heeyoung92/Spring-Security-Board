@@ -64,7 +64,9 @@ public class BoardController {
 	public  List<Map<String,Object>> selectBoardPaging(
 			@RequestParam int page_index, // Ajax
 			@RequestParam int page_row ,
-			@RequestParam(value="keyword",required=false ) String keyword 
+			@RequestParam(value="keyword",required=false ) String keyword,
+			@RequestParam(value="startDate",required=false ) String startDate, 
+			@RequestParam(value="endDate",required=false ) String endDate 
 			) throws Exception {
 
 		logger.info("selectBoardPaging");
@@ -74,10 +76,12 @@ public class BoardController {
 		map.put("page_row", page_row);
 		
 		map.put("keyword", keyword);
-		if(keyword != null){
-			logger.info("keyword: "+ keyword);
-		}
-
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
+		logger.info("keyword: "+ keyword + ", startDate: "+startDate+", endDate: "+endDate);
+		
+		
 		List<Map<String,Object>> list = boardService.selectBoardPaging(map);
 		return list;
 	}

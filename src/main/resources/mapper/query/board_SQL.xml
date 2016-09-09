@@ -9,16 +9,23 @@
 			FROM (
   				SELECT LEVEL, IDX, PARENT_IDX,TITLE, HIT_CNT, CREA_DATE, WRITER
     			FROM TB_BOARD
+    			WHERE 1=1
     	    <if test="keyword != null">
-             WHERE REGEXP_LIKE(TITLE, #{keyword}, 'i')
+             AND REGEXP_LIKE(TITLE, #{keyword}, 'i')
           </if>
-    			START WITH PARENT_IDX IS NULL
+          <if test="startDate != null">
+             AND SUBSTR(CREA_DATE,1,9) <![CDATA[>=]]> SUBSTR(#{startDate},3,11)
+          </if>
+    	    <if test="endDate != null">
+             AND SUBSTR(CREA_DATE,1,9) <![CDATA[<=]]> SUBSTR(#{endDate},3,11)
+    	    </if>
+          START WITH PARENT_IDX IS NULL
 				  CONNECT BY PRIOR IDX = PARENT_IDX
 				  ORDER SIBLINGS BY CREA_DATE DESC
     		) pagetable
 		  )
    <![CDATA[
-		where rnum <= #{END}  AND rnum >= #{START}
+		WHERE rnum <= #{END}  AND rnum >= #{START}
 		]]>
 	</select>
   

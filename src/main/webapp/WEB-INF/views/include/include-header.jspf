@@ -20,5 +20,10 @@
 <script src="<c:url value='/js/jquery.cookie.js'/>" type="text/javascript" ></script>
 
 <script src="<c:url value='/js/bootstrap.min.js'/>" type="text/javascript" ></script>
+
+<!-- date picker -->
+<script src="<c:url value='/js/bootstrap-daterangepicker/moment.min.js'/>" type="text/javascript" ></script>
+<script src="<c:url value='/js/bootstrap-daterangepicker/daterangepicker.js'/>" type="text/javascript" ></script>
+<script src="<c:url value='/js/bootstrap-wizard/bwizard.min.js'/>" type="text/javascript" ></script>
  
  
