@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.print.attribute.standard.PrinterState;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ public class MovieController {
     private MovieService movieService;
 
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/openMovieList.do*")
 	@ResponseBody
 	public ModelAndView openBoardList(Map<String,Object> map) throws Exception {
@@ -49,17 +51,33 @@ public class MovieController {
 			System.out.println("Movies from 2013");
 			iterator = items.iterator();
 			
-			//int i=0;
 			while (iterator.hasNext()) {
 				item = iterator.next();
 				MovieVO movie = new MovieVO();
+				movie.setYear(item.getString("year"));
+				movie.setTitle(item.getString("title"));
+
 				movie.setTitle(item.getString("title"));
 				movie.setImage_url((String) item.getMap("info").get("image_url"));
+				movie.setRelease_date((String) item.getMap("info").get("release_date"));
+
+				movie.setActors((List<String>) item.getMap("info").get("actors"));
+				movie.setDirectors((List<String>) item.getMap("info").get("directors"));
+				movie.setGenres((List<String>) item.getMap("info").get("genres"));
+
+				try {
+					movie.setRating(Double.parseDouble(String.valueOf(item.getMap("info").get("rating"))));  // 'java.math.BigDecimal cannot be cast to java.lang.Integer'
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+//					System.out.println(e.getMessage());
+				}
+
 				movie.setPlot((String) item.getMap("info").get("plot"));
 
-	//			i++;	
 				list.add(movie);
-				System.out.println(item.getNumber("year") + ": " + item.getString("title") +", " + item.getMap("info").get("directors"));
+//				System.out.println(movie.toString());
+//				System.out.println(item.getNumber("year") + ": " + item.getString("title") +", " + item.getMap("info").get("directors"));
 			}
 			mv.addObject("list", list);
 

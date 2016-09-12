@@ -56,7 +56,7 @@
 					<h6 class="panel-title f-s-14">
 						<i class="fa fa-table"></i> 전체보기 
 						<span class="pull-right"> 
-						  <span class="label label-success ">TOTAL : ${total}</span>
+						  <span id="total" class="label label-success ">TOTAL : ${total}</span>
 						  <button type="button" class="btn btn-xs btn-info" id="excelDownBtn_list">Excel Download</button>
 						</span>
 					</h6>
@@ -118,6 +118,7 @@
 			</div>
 		</div>
 	</div>
+
 
 	<%@ include file="../include/include-body.jspf"%>
 	<script type="text/javascript">
@@ -275,6 +276,7 @@
 				//검색 결과에 따른 Total수 변경 for Paging
 				if(keyword != null || startDate != null || endDate != null){
   			  $(selector).pagination('updateItems',total);
+  			  $("#total").text("TOTAL : "+total);
 				}
 				
 				$("a[name='title']").on("click", function(e) { //제목 
