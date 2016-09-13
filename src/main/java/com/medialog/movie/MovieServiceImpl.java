@@ -19,26 +19,27 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
 import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
+import com.medialog.entity.MovieVO;
 
 @Service("movieService")
 public class MovieServiceImpl implements MovieService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
-
+	AmazonDynamoDBClient client = new AmazonDynamoDBClient()
+			// .withEndpoint("http://localhost:8000");
+			.withRegion(Regions.AP_NORTHEAST_2); // Seoul
+	DynamoDB dynamoDB = new DynamoDB(client);
+	Table table = dynamoDB.getTable("Movies");
+	
 	@Override
 	public ItemCollection<QueryOutcome> selectMovieList(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
-		AmazonDynamoDBClient client = new AmazonDynamoDBClient()
-				// .withEndpoint("http://localhost:8000");
-				.withRegion(Regions.AP_NORTHEAST_2); // Seoul
-
-		DynamoDB dynamoDB = new DynamoDB(client);
-
-		Table table = dynamoDB.getTable("Movies");
+		
 
 		HashMap<String, String> nameMap = new HashMap<String, String>();
 		nameMap.put("#yr", "year");
@@ -90,6 +91,34 @@ public class MovieServiceImpl implements MovieService {
 //			System.err.println(e.getMessage());
 //		}
 		return items;
+	}
+
+	@Override
+	public boolean createMovie(MovieVO movieVo) throws Exception {
+		// TODO Auto-generated method stub
+		
+		String release_date = movieVo.getRelease_date();
+		//System.out.println(release_date.substring(0, 4));
+		int year = Integer.parseInt(release_date.substring(0, 4));
+		
+		String title = movieVo.getTitle();
+		
+		final Map<String, Object> infoMap = new HashMap<String, Object>();
+		infoMap.put("release_date",  release_date);
+		infoMap.put("plot",  movieVo.getPlot());
+		infoMap.put("actors", movieVo.getActors());
+		infoMap.put("directors", movieVo.getDirectors());
+		infoMap.put("genres", movieVo.getGenres());
+		infoMap.put("rating",  movieVo.getRating());
+	   
+		System.out.println("Adding a new item...");
+        PutItemOutcome outcome = table.putItem(new Item()
+              .withPrimaryKey("year", year, "title", title)
+              .withMap("info", infoMap));
+
+        System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
+
+		return false;
 	}
 
 }

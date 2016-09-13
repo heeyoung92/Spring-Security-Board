@@ -1,11 +1,12 @@
 package com.medialog.entity;
 
+import java.sql.Date;
 import java.util.List;
 
 public class MovieVO {
 
 
-	private String year;
+	private int year;
 	private String title;
 	private String image_url;
 	private double rating;
@@ -21,11 +22,11 @@ public class MovieVO {
 	public String toString() {
 		return "MovieVO [title=" + title + " rating="+rating+" actors="+actors.toString()+" release_date="+release_date+"]";
 	}
-	public String getYear() {
+	public int getYear() {
 		return year;
 	}
 
-	public void setYear(String year) {
+	public void setYear(int year) {
 		this.year = year;
 	}
 
