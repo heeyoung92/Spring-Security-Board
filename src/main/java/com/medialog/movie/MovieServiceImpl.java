@@ -1,14 +1,8 @@
 package com.medialog.movie;
 
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.Spring;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +13,11 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
 import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 import com.medialog.entity.MovieVO;
@@ -91,7 +87,7 @@ public class MovieServiceImpl implements MovieService {
 //			System.err.println(e.getMessage());
 //		}
 		return items;
-	}
+}
 
 	@Override
 	public boolean createMovie(MovieVO movieVo) throws Exception {
@@ -119,6 +115,17 @@ public class MovieServiceImpl implements MovieService {
         System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
 
 		return false;
+	}
+
+	@Override
+	public void deleteBoard(MovieVO movieVo) throws Exception {
+		// TODO Auto-generated method stub
+		DeleteItemSpec deleteItemSpec = new DeleteItemSpec()
+		           .withPrimaryKey(new PrimaryKey("year", movieVo.getYear(), "title", movieVo.getTitle()));
+		
+		System.out.println("Attempting a conditional delete...");
+        table.deleteItem(deleteItemSpec);
+        System.out.println("DeleteItem succeeded");
 	}
 
 }

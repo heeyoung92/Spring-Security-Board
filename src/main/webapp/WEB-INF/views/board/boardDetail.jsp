@@ -26,8 +26,8 @@
 					<c:set var="writer">${map.WRITER}</c:set>
 
 					<c:if test="${ writer eq userName }">
-					   <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="update">수정하기</a> &nbsp; 
-             <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="delete">삭제하기</a>
+					   <a href="#this" class="btn btn-sm btn-danger pull-right m-r-5" id="update">수정하기</a> &nbsp; 
+             <a href="#this" class="btn btn-sm btn-danger pull-right m-r-5" id="delete">삭제하기</a>
 					</c:if>
 
 					<a href="openBoardList.do" class="btn btn-sm btn-info pull-right m-r-5">목록보기</a> &nbsp; <a href="#this" class="btn btn-sm btn-info pull-right m-r-5" id="replyBoard">답글쓰기</a> &nbsp;&nbsp;&nbsp;

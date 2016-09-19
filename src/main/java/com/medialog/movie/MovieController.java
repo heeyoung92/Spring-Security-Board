@@ -2,7 +2,6 @@ package com.medialog.movie;
 
 import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -77,7 +76,7 @@ public class MovieController {
 					
 				} catch (Exception e) {
 					// TODO: handle exception
-//					System.out.println(e.getMessage());
+					System.out.println("["+movie.getTitle()+"] "+e.getMessage());
 				}
 
 				movie.setPlot((String) item.getMap("info").get("plot"));
@@ -134,6 +133,14 @@ public class MovieController {
 		
 		return redirectView;
 	}
-	
+
+	@RequestMapping(value = "/deleteMovie.do")
+	public ModelAndView deleteBoard(@ModelAttribute MovieVO movieVo) throws Exception {
+//		logger.info("deleteMovie: "+movieVo.getTitle()+", "+movieVo.getYear());
+		ModelAndView mv = new ModelAndView("redirect:/openMovieList.do");
+		movieService.deleteBoard(movieVo);
+
+		return mv;
+	}
 
 }

@@ -1,6 +1,5 @@
 package com.medialog.entity;
 
-import java.sql.Date;
 import java.util.List;
 
 public class MovieVO {
@@ -17,6 +16,8 @@ public class MovieVO {
 	private List<String> genres;
 	private String release_date;
 	
+	private double running_time_secs;
+	private double rank;
 	
 	@Override
 	public String toString() {
@@ -88,6 +89,18 @@ public class MovieVO {
 	}
 	public void setRelease_date(String release_date) {
 		this.release_date = release_date;
+	}
+	public double getRank() {
+		return rank;
+	}
+	public void setRank(double rank) {
+		this.rank = rank;
+	}
+	public double getRunning_time_secs() {
+		return running_time_secs;
+	}
+	public void setRunning_time_secs(double running_time_secs) {
+		this.running_time_secs = running_time_secs;
 	}
 
 

@@ -75,20 +75,12 @@
   <div id="modal_detail" class="modal fade reset" tabindex="-1" role="dialog"  >
       <div class="modal-dialog">
           <div class="modal-content">
-              
-              <div class="row">
-                  <div class="col-lg-12">
-                      <h4><strong><i class="fa fa-angle-double-right"></i>영화 상세</strong></h4>  
-               
-                  </div>
-
-              </div>
               <div class="modal-header">
-                <button type="button" class="btn btn-primary">수정</button>
-                <button type="button" class="btn btn-import">삭제</button>
-              
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4><strong><i class="fa fa-angle-double-right"></i>영화 상세</strong></h4>  
+                <button type="button" id="delete" class="btn btn-danger btn-sm pull-right" >삭제</button>
+                <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-right:7px;">수정</button>
               </div>
-              
               <div class="row p-10">
                   <div class="col-lg-12">
                       <h3 class="movie-title">
@@ -119,13 +111,13 @@
                               <div style="height: 5px;"></div>
                               
                               <label style="padding-right:38px;">평점</label>
-                              <h5 class="movie-rating"></h5> 
+                              <h5 class="movie-rating"></h5>
                               <div id="stars"></div>
                               
                               
                               <div style="height: 5px;"></div>
-                         </form> 
-                         <label style="padding-right:38px;">줄거리</label> 
+                         </form>
+                         <label style="padding-right:38px;">줄거리</label>
                          <div class="well">
                             <h5 class="movie-plot"></h5>
                          </div>
@@ -152,7 +144,7 @@
 
 							<input type="hidden" name="page" value="${result.page}" /> 
 							<input type="hidden" name="srchEventName" value="${result.param.srchEventName}" /> 
-							<input type="hidden" name="event"> 
+							<input type="hidden" name="event">
 							<input type="hidden" name="event_no">
 
 							<div class="form-group form-group-sm">
@@ -265,8 +257,36 @@
 
 		  myRating.setRating(data.rating, false);
 	  });
+	  
+	  
+	  $('#delete').click(function(e){
+		  e.preventDefault();
+	    var modal = $('#modal_detail')
+	    var year = modal.find('.movie-release_date')[0].textContent.substring(0,4);
+	    var title =  modal.find('.movie-title')[0].textContent 
+	    console.log( title + ", "+year );
+      var url = "<c:url value='deleteMovie.do' />";
+
+      var comSubmit = new ComSubmit("");
+      comSubmit.setUrl(url);
+      comSubmit.addParam("title", title);
+      comSubmit.addParam("year", year);
+      
+      comSubmit.submit();
+      //fn_deleteMovie($(this));
+    });
 	});
 	 
+	 var fn_deleteMovie=function(){
+		  	 var idx = "${map.IDX}";
+	       var password = "";
+	       var url = "<c:url value='deleteMovie.do' />";
+
+	       var comSubmit = new ComSubmit("");
+	       comSubmit.setUrl(url);
+	       comSubmit.addParam("IDX", idx);
+	       comSubmit.submit();
+	 }
      // color picker - yyyy/mm/dd 형식    
      var initDatePickerInit = function() {
          var options = {
