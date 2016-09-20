@@ -17,9 +17,13 @@ import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
+import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.medialog.entity.MovieVO;
 
 @Service("movieService")
@@ -94,9 +98,8 @@ public class MovieServiceImpl implements MovieService {
 		// TODO Auto-generated method stub
 		
 		String release_date = movieVo.getRelease_date();
-		//System.out.println(release_date.substring(0, 4));
+
 		int year = Integer.parseInt(release_date.substring(0, 4));
-		
 		String title = movieVo.getTitle();
 		
 		final Map<String, Object> infoMap = new HashMap<String, Object>();
@@ -116,7 +119,44 @@ public class MovieServiceImpl implements MovieService {
 
 		return false;
 	}
+	@Override
+	public boolean updateMovie(MovieVO movieVo) throws Exception {
+		// TODO Auto-generated method stub
+		String release_date = movieVo.getRelease_date();
 
+		int year = Integer.parseInt(release_date.substring(0, 4));
+		String title = movieVo.getTitle();
+		
+		final Map<String, Object> infoMap = new HashMap<String, Object>();
+		infoMap.put("release_date",  release_date);
+		infoMap.put("plot",  movieVo.getPlot());
+		infoMap.put("actors", movieVo.getActors());
+		infoMap.put("directors", movieVo.getDirectors());
+		infoMap.put("genres", movieVo.getGenres());
+		infoMap.put("rating",  movieVo.getRating());
+		
+		UpdateItemSpec updateItemSpec = new UpdateItemSpec()
+	            .withPrimaryKey("year", year, "title", title)
+	            .withUpdateExpression("set info.actors = :actors, info.directors=:directors, info.genres=:genres, info.plot=:plot")
+	            .withValueMap(new ValueMap()
+		                .withList(":actors", movieVo.getActors())
+		                .withList(":directors", movieVo.getDirectors())
+		                .withList(":genres", movieVo.getGenres())
+		                .withString(":plot", movieVo.getPlot()))
+	            .withReturnValues(ReturnValue.UPDATED_NEW);
+		try {
+			 System.out.println("Attempting a conditional update...");
+			 UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
+			 System.out.println("UpdateItem succeeded:\n" + outcome.getItem().toJSONPretty());
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			 System.err.println("Unable to update item: " + year + " " + title);
+	         System.err.println(e.getMessage());
+		}
+	   
+		return false;
+	}
 	@Override
 	public void deleteBoard(MovieVO movieVo) throws Exception {
 		// TODO Auto-generated method stub
@@ -127,5 +167,7 @@ public class MovieServiceImpl implements MovieService {
         table.deleteItem(deleteItemSpec);
         System.out.println("DeleteItem succeeded");
 	}
+
+
 
 }

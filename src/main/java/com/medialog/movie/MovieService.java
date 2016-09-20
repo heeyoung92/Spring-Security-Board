@@ -14,4 +14,6 @@ public interface MovieService {
 	boolean createMovie(MovieVO movieVo) throws Exception;
 
 	void deleteBoard(MovieVO movieVo) throws Exception;
+
+	boolean updateMovie(MovieVO movieVo) throws Exception;
 }

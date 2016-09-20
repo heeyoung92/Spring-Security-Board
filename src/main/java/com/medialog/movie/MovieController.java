@@ -76,7 +76,7 @@ public class MovieController {
 					
 				} catch (Exception e) {
 					// TODO: handle exception
-					System.out.println("["+movie.getTitle()+"] "+e.getMessage());
+//					System.out.println("["+movie.getTitle()+"] "+e.getMessage());
 				}
 
 				movie.setPlot((String) item.getMap("info").get("plot"));
@@ -104,20 +104,19 @@ public class MovieController {
 			HttpServletRequest request) throws Exception, NoSuchAlgorithmException, FileNotFoundException {
 		
 		//logger.info("[Movie CREATE] :"+movieVo.getTitle());
-		if(movieService.createMovie(movieVo)){
-			logger.info("[Movie CREATE] : {} ", movieVo.getTitle());
-		} 
 		
 		//insert
 		if(event.equals("create")) {
-			logger.info("Create [Movie CREATE] : {} ", movieVo.getTitle());
+			if(movieService.createMovie(movieVo)){
+				logger.info("[Movie CREATE] : {} ", movieVo.getTitle());
+			} 
 		}
 		
 		//update
 		if(event.equals("update")){
-//			if(eventService.updateEvent(movieVo)){
-//				log.info("[EVENT UPDATE] : {} / [RESULT] : {}", "Event_no : " +movieVo.getEvent_name(), CMSCode.EventOK);
-//			}
+			if(movieService.updateMovie(movieVo)){
+				logger.info("[Movie UPDATE] : {} ", movieVo.getTitle());
+			}
 		}
 			
 		//WEB 캐시갱신
