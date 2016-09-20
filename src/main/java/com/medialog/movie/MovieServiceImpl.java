@@ -104,7 +104,10 @@ public class MovieServiceImpl implements MovieService {
 		
 		final Map<String, Object> infoMap = new HashMap<String, Object>();
 		infoMap.put("release_date",  release_date);
-		infoMap.put("plot",  movieVo.getPlot());
+		// plot 빈 경우 에러 방지
+		if(movieVo.getPlot()!="")
+			infoMap.put("plot",  movieVo.getPlot());
+	
 		infoMap.put("actors", movieVo.getActors());
 		infoMap.put("directors", movieVo.getDirectors());
 		infoMap.put("genres", movieVo.getGenres());
@@ -119,6 +122,7 @@ public class MovieServiceImpl implements MovieService {
 
 		return false;
 	}
+	
 	@Override
 	public boolean updateMovie(MovieVO movieVo) throws Exception {
 		// TODO Auto-generated method stub
@@ -134,7 +138,12 @@ public class MovieServiceImpl implements MovieService {
 		infoMap.put("directors", movieVo.getDirectors());
 		infoMap.put("genres", movieVo.getGenres());
 		infoMap.put("rating",  movieVo.getRating());
-		
+
+		// plot 빈 경우 에러 방지
+		String plot = "-";
+		if(movieVo.getPlot()!="")
+			plot = movieVo.getPlot();
+
 		UpdateItemSpec updateItemSpec = new UpdateItemSpec()
 	            .withPrimaryKey("year", year, "title", title)
 	            .withUpdateExpression("set info.actors = :actors, info.directors=:directors, info.genres=:genres, info.plot=:plot")
@@ -142,21 +151,16 @@ public class MovieServiceImpl implements MovieService {
 		                .withList(":actors", movieVo.getActors())
 		                .withList(":directors", movieVo.getDirectors())
 		                .withList(":genres", movieVo.getGenres())
-		                .withString(":plot", movieVo.getPlot()))
+		                .withString(":plot", plot))
 	            .withReturnValues(ReturnValue.UPDATED_NEW);
-		try {
-			 System.out.println("Attempting a conditional update...");
-			 UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
-			 System.out.println("UpdateItem succeeded:\n" + outcome.getItem().toJSONPretty());
 
-		} catch (Exception e) {
-			// TODO: handle exception
-			 System.err.println("Unable to update item: " + year + " " + title);
-	         System.err.println(e.getMessage());
-		}
-	   
+		System.out.println("Attempting a conditional update...");
+		UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
+		System.out.println("UpdateItem succeeded:\n" + outcome.getItem().toJSONPretty());
+
 		return false;
 	}
+	
 	@Override
 	public void deleteBoard(MovieVO movieVo) throws Exception {
 		// TODO Auto-generated method stub
@@ -167,7 +171,4 @@ public class MovieServiceImpl implements MovieService {
         table.deleteItem(deleteItemSpec);
         System.out.println("DeleteItem succeeded");
 	}
-
-
-
 }
