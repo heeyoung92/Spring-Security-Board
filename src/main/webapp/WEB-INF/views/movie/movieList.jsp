@@ -13,7 +13,7 @@
 			<h4>
 				<strong><i class="fa fa-angle-double-right"></i> Movie 리스트 </strong>
 			</h4> 
-			<!-- <div id="stars"></div> -->
+
 			<div class="underline"></div>
 			<p>
 			<div class="row m-b-10">
@@ -114,7 +114,8 @@
                               
                               <label style="padding-right:38px;">평점</label>
                               <h5 class="movie-rating"></h5>
-                              <div id="stars"></div>
+                              <p><span class="star_rating"><span id="span1" style="width:0%"></span></span></p>
+
                               
                               
                               <div style="height: 5px;"></div>
@@ -231,13 +232,13 @@
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/rsa/rng.js"></script>
 	<script>
 	 $(document).ready(function() {
-    var stars = document.querySelector('#stars');
+/*     var stars = document.querySelector('#stars');
     var currentRating = 0;
     var maxRating= 1;
     var callback = function(rating) { alert(currentRating); };
 
     var myRating = rating(stars, currentRating, maxRating, callback);
-
+*/
     initDatePickerInit();
 
 	  //detail list
@@ -254,8 +255,9 @@
 	    modal.find('.movie-genres').text(data.genres.substring(1,data.genres.length-1))
 	    modal.find('.movie-release_date').text(data.release_date)
 	    modal.find('.movie-rating').text(data.rating)
-
-		  myRating.setRating(data.rating, false);
+      var element = document.getElementById("span1");
+		  element.style.width = data.rating*10 + "%"
+		  
 	  });
 	  
 	  $('#modal_movieinfo').on('shown.bs.modal', function(e) {
@@ -263,8 +265,27 @@
 	      var button = $(e.relatedTarget);
 	      var data = button.data('whatever-json');
 	      var modal = $(this)
+
 	      console.log(data.event);
 	      modal.find('#event').val(data.event)
+
+	      // modal 값 초기화(더 좋은 방법 없남?.?)
+	      if(data.event=='create'){
+	    	  var infoModal = $('#modal_movieinfo')
+	     
+	    	  infoModal.find('.title').text("")
+	        infoModal.find('#title').val("")
+	        infoModal.find('#title').show();
+
+	        infoModal.find('.release_date').text("")
+	        infoModal.find('#release_date').val("")
+	        infoModal.find('#release_date').show();
+
+ 	        infoModal.find('#genres').val("")
+	        infoModal.find('#actors').val("")
+	        infoModal.find('#directors').val("")
+	        infoModal.find('#plot').val("")
+	      }
 	    });
 	  
 	  $('#delete').click(function(e){
@@ -287,6 +308,8 @@
 	  $('#update').click(function(e){
 	      e.preventDefault();
 	      var modal = $('#modal_detail')
+	      modal.modal('hide') //#modal_detail 사라짐
+	      
 	      var year = modal.find('.movie-release_date')[0].textContent.substring(0,4);
 	      var title =  modal.find('.movie-title')[0].textContent 
 	      console.log( title + ", "+year  );

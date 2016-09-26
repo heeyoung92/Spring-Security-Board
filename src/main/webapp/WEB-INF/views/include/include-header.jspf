@@ -13,7 +13,6 @@
 <%-- <link rel="stylesheet" type="text/css" href="<c:url value='/css/ui.css'/>" />
  --%>
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/styles.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/rating.min.css'/>" >
 
 <link href="<c:url value='/js/lightbox/css/lightbox.css'/>" rel="stylesheet" />
 
@@ -24,8 +23,6 @@
 <script src="<c:url value='/js/jquery.cookie.js'/>" type="text/javascript" ></script>
 
 <script src="<c:url value='/js/bootstrap.min.js'/>" type="text/javascript" ></script>
-<script src="<c:url value='/js/rating/rating.js'/>" ></script>
-<script src="<c:url value='/js/rating/rating.min.js'/>" ></script>
 
 <!-- date picker -->
 <script src="<c:url value='/js/bootstrap-daterangepicker/moment.min.js'/>" type="text/javascript" ></script>
