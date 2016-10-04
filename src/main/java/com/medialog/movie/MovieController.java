@@ -41,10 +41,12 @@ public class MovieController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/openMovieList.do*")
 	@ResponseBody
-	public ModelAndView openBoardList(Map<String,Object> map) throws Exception {
-		logger.info("openBoardList");
+	public ModelAndView openBoardList(Map<String,Object> map,
+			@RequestParam(defaultValue="2016") int year) throws Exception {
 		ModelAndView mv = new ModelAndView("movie/movieList");
-	    
+	    map.put("year", year);
+		logger.info("Movies from "+year);			
+
 		ItemCollection<QueryOutcome> items = movieService.selectMovieList(map);
 		ArrayList<MovieVO> list = new ArrayList<MovieVO>();
 //		MovieVO movie = new MovieVO();
@@ -53,7 +55,7 @@ public class MovieController {
 		Item item = null;
 
 		try {
-			System.out.println("Movies from 2013");
+	//		logger.info("Movies from "+"2013");			
 			iterator = items.iterator();
 			
 			while (iterator.hasNext()) {
@@ -82,13 +84,15 @@ public class MovieController {
 				movie.setPlot((String) item.getMap("info").get("plot"));
 
 				list.add(movie);
+			
 //				System.out.println(movie.toString());
 //				System.out.println(item.getNumber("year") + ": " + item.getString("title") +", " + item.getMap("info").get("directors"));
 			}
 			mv.addObject("list", list);
+			mv.addObject("year", year);
 
 		} catch (Exception e) {
-			System.err.println("Unable to query movies from 2013");
+			logger.error("Unable to query movies from "+"2013");
 			System.err.println(e.getMessage());
 		}
 		return mv;

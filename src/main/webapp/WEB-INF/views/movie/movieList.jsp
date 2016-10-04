@@ -21,9 +21,18 @@
 				    data-whatever-json='{ "event" : "create" }'>영화 등록</button>
 			</div>
 
+			<div class="dropdown" align="right">
+				<select id="changeYear" name="changeYear">
+					<option value="2016">2016년</option>
+					<option value="2015">2015년</option>
+					<option value="2014">2014년</option>
+				  <option value="2013">2013년</option>
+					<option value="2012">2012년</option>
+				</select>
+			</div>
 			<div class="row">
 				<div class="col-sm-12">
-					<h3>Movies from 2013</h3>
+					<h3>Movies from  <strong id="selectedYear"> ${year} </strong></h3>
 				</div>
 			</div>
 
@@ -115,8 +124,6 @@
                               <label style="padding-right:38px;">평점</label>
                               <h5 class="movie-rating"></h5>
                               <p><span class="star_rating"><span id="span1" style="width:0%"></span></span></p>
-
-                              
                               
                               <div style="height: 5px;"></div>
                          </form>
@@ -232,18 +239,14 @@
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/rsa/rng.js"></script>
 	<script>
 	 $(document).ready(function() {
-/*     var stars = document.querySelector('#stars');
-    var currentRating = 0;
-    var maxRating= 1;
-    var callback = function(rating) { alert(currentRating); };
+ 
+//		initDatePickerInit();
+    document.getElementById("changeYear").selectedIndex = 2016 - ${year}    
 
-    var myRating = rating(stars, currentRating, maxRating, callback);
-*/
-    initDatePickerInit();
 
 	  //detail list
 	  $('#modal_detail').on('shown.bs.modal', function(e) {
-		  //getEventDetailList();
+		  // getEventDetailList();
 		  var button = $(e.relatedTarget);
 		  var data = button.data('whatever-json');
 		  var modal = $(this)
@@ -253,7 +256,7 @@
 	    modal.find('.movie-actors').text(data.actors.substring(1,data.actors.length-1))
 	    modal.find('.movie-directors').text(data.directors.substring(1,data.directors.length-1))
 	    modal.find('.movie-genres').text(data.genres.substring(1,data.genres.length-1))
-	    modal.find('.movie-release_date').text(data.release_date)
+	    modal.find('.movie-release_date').text(data.release_date.substring(0,10))
 	    modal.find('.movie-rating').text(data.rating)
       var element = document.getElementById("span1");
 		  element.style.width = data.rating*10 + "%"
@@ -328,8 +331,28 @@
 	      infoModal.find('#directors').val(modal.find('.movie-directors')[0].textContent)
 	      infoModal.find('#plot').val(modal.find('.movie-plot')[0].textContent)
 	        
-	    });
-	});
+	  });
+	  
+	  $('#changeYear').change(function() { // paging row 값 변경
+         var year = $('#changeYear option:selected').val();
+         console.log(year)
+         $('#selectedYear').text(year);
+//          fn_selectBoardList($(this));  
+          var url ="openMovieList.do" 
+          var comSubmit = new ComSubmit("");
+          comSubmit.setUrl(url);
+          comSubmit.addParam("year", year);
+          comSubmit.submit();
+       /*   $.ajax({
+             url : "openMovieList.do?" + "year="+year,
+             method : "post",
+             type : "json",
+             contentType : "application/json"
+   //          success : fn_selectMovieListCallback
+           }); */
+     });
+  
+	 });
 	 
 	 var fn_deleteMovie=function(){
 		  	 var idx = "${map.IDX}";
@@ -342,7 +365,7 @@
 	       comSubmit.submit();
 	 }
      // color picker - yyyy/mm/dd 형식    
-     var initDatePickerInit = function() {
+ /*      var initDatePickerInit = function() {
          var options = {
            //minDate: moment(),
            maxDate: moment().add(250, 'days'),
@@ -363,10 +386,10 @@
                monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
                firstDay: 1
            }
-       }
+       } 
        $('.datetime').daterangepicker($.extend(options, { timePicker: false, format : 'YYYY-MM-DD' }));
        //$('.date').daterangepicker($.extend(options, { timePicker: false, format : 'YYYY/MM/DD' }));
-   }
+     } */
 	</script>
 </body>
 </html>

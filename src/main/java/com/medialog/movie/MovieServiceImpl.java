@@ -45,7 +45,9 @@ public class MovieServiceImpl implements MovieService {
 		nameMap.put("#yr", "year");
 
 		HashMap<String, Object> valueMap = new HashMap<String, Object>();
-		valueMap.put(":yyyy", 2013);
+		valueMap.put(":yyyy", map.get("year"));
+
+		System.out.println("DB 조회 ..."+map.get("year"));
 
 		QuerySpec querySpec = new QuerySpec().withKeyConditionExpression("#yr = :yyyy")
 				.withNameMap(new NameMap().with("#yr", "year")).withValueMap(valueMap);
